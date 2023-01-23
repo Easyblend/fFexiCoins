@@ -29,47 +29,37 @@ const Login = () => {
             <Col xl="6">
               <div className="copyright text-center text-xl-left text-muted">
                 © {new Date().getFullYear()}{" "}
-                <a
-                  className="font-weight-bold ml-1"
-                  href="https://www.creative-tim.com?ref=adr-auth-footer"
-                  target="_blank"
-                >
-                  Creative Tim
+                <a className="font-weight-bold ml-1" href="" target="_blank">
+                  FlexiCoins
                 </a>
               </div>
             </Col>
             <Col xl="6">
               <Nav className="nav-footer justify-content-center justify-content-xl-end">
                 <NavItem>
-                  <NavLink
-                    href="https://www.creative-tim.com?ref=adr-auth-footer"
-                    target="_blank"
-                  >
-                    Creative Tim
+                  <NavLink href="" target="_blank">
+                    FlexiCoins.co
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href="https://www.creative-tim.com/presentation?ref=adr-auth-footer"
-                    target="_blank"
-                  >
-                    About Us
+                  <NavLink href="" target="_blank">
+                    BTC
+                  </NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink href="" target="_blank">
+                    USD
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href="http://blog.creative-tim.com?ref=adr-auth-footer"
-                    target="_blank"
-                  >
-                    Blog
+                  <NavLink href="" target="_blank">
+                    ETH
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink
-                    href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md?ref=adr-auth-footer"
-                    target="_blank"
-                  >
-                    MIT License
+                  <NavLink href="" target="_blank">
+                    EURO
                   </NavLink>
                 </NavItem>
               </Nav>

@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
@@ -25,10 +25,15 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "variables/FirebaseConfig";
+import { Navigate, useNavigate } from "react-router-dom-v5-compat";
 
 const Admin = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -64,6 +69,17 @@ const Admin = (props) => {
     return "Brand";
   };
 
+  const checkUser = () => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+      } else {
+        navigate("/auth/login");
+      }
+    });
+  };
+
+  useEffect(checkUser, []);
+
   return (
     <>
       <Sidebar
@@ -72,7 +88,7 @@ const Admin = (props) => {
         logo={{
           innerLink: "/admin/index",
           imgSrc: require("../assets/img/brand/argon-react.png"),
-          imgAlt: "..."
+          imgAlt: "...",
         }}
       />
       <div className="main-content" ref={mainContent}>

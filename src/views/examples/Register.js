@@ -29,10 +29,37 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "variables/FirebaseConfig";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom-v5-compat";
+
 const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
+
+  const provider = new GoogleAuthProvider();
+  const navigate = useNavigate();
+
+  const googleSignUp = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        setName(result.user.displayName);
+        setEmail(result.user.email);
+        setPhotoUrl(result.user.photoURL);
+        toast.success("Welcome " + result.user.displayName);
+        navigate("/admin");
+      })
+      .catch((error) => toast.error("This issue occured: " + error.code));
+  };
+
   return (
     <>
       <Col lg="6" md="8">
@@ -43,27 +70,9 @@ const Register = () => {
             </div>
             <div className="text-center">
               <Button
-                className="btn-neutral btn-icon mr-4"
+                className="btn-neutral btn-icon w-75"
                 color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={googleSignUp}
               >
                 <span className="btn-inner--icon">
                   <img
@@ -121,12 +130,7 @@ const Register = () => {
                   />
                 </InputGroup>
               </FormGroup>
-              <div className="text-muted font-italic">
-                <small>
-                  password strength:{" "}
-                  <span className="text-success font-weight-700">strong</span>
-                </small>
-              </div>
+
               <Row className="my-4">
                 <Col xs="12">
                   <div className="custom-control custom-control-alternative custom-checkbox">
@@ -141,7 +145,10 @@ const Register = () => {
                     >
                       <span className="text-muted">
                         I agree with the{" "}
-                        <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                        <a
+                          href="https://crypto-policy.tech/"
+                          onClick={(e) => e.preventDefault()}
+                        >
                           Privacy Policy
                         </a>
                       </span>
@@ -153,6 +160,12 @@ const Register = () => {
                 <Button className="mt-4" color="primary" type="button">
                   Create account
                 </Button>
+              </div>
+              <div className="text-muted mt-4 text-center">
+                Already have an account?{" "}
+                <Link className="text-danger font-weight-700" to="/auth/login">
+                  Login
+                </Link>
               </div>
             </Form>
           </CardBody>

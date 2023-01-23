@@ -25,10 +25,14 @@ import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 
 import routes from "routes.js";
+import Login from "views/examples/Login";
+import Register from "views/examples/Register";
 
 const Auth = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
+
+  console.log(props.location.pathname);
 
   React.useEffect(() => {
     document.body.classList.add("bg-default");
@@ -62,15 +66,15 @@ const Auth = (props) => {
     <>
       <div className="main-content" ref={mainContent}>
         <AuthNavbar />
-        <div className="header bg-gradient-info py-7 py-lg-8">
+        <div className="header bg-gradient-info py-lg-8 py-7">
           <Container>
-            <div className="header-body text-center mb-7">
+            <div className="header-body text-center ">
               <Row className="justify-content-center">
                 <Col lg="5" md="6">
                   <h1 className="text-white">Welcome!</h1>
-                  <p className="text-lead text-light">
-                    Use these awesome forms to login or create new account in
-                    your project for free.
+                  <p className="text-lead text-white">
+                    We are here to make finacing easy and quicker! You dont need
+                    a bank to own a dollar account
                   </p>
                 </Col>
               </Row>
@@ -93,15 +97,13 @@ const Auth = (props) => {
           </div>
         </div>
         {/* Page content */}
-        <Container className="mt--8 pb-5">
-          <Row className="justify-content-center">
-            <Switch>
-              {getRoutes(routes)}
-              <Redirect from="*" to="/auth/login" />
-            </Switch>
-          </Row>
-        </Container>
       </div>
+
+      {/*Login and register page created here*/}
+      <Container className="d-flex justify-content-center">
+        {props.location.pathname === "/auth/login" ? <Login /> : <Register />}
+      </Container>
+
       <AuthFooter />
     </>
   );

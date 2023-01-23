@@ -16,24 +16,20 @@
 
 */
 /*eslint-disable*/
-import { useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
-// nodejs library to set properties for components
-import { PropTypes } from "prop-types";
+import { useNavigate } from "react-router-dom-v5-compat";
+import { toast } from "react-toastify";
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
   Form,
   Input,
   InputGroupAddon,
@@ -45,16 +41,27 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
-  Col
+  Col,
 } from "reactstrap";
-
-var ps;
+import { auth } from "variables/FirebaseConfig";
 
 const Sidebar = (props) => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  //Checking if a user is logged in
+  const checkUser = () => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
+      }
+    });
+  };
+
+  useEffect(checkUser, []);
   const [collapseOpen, setCollapseOpen] = useState();
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -87,23 +94,25 @@ const Sidebar = (props) => {
     });
   };
 
-  const { bgColor, routes, logo } = props;
+  const { routes, logo } = props;
   let navbarBrandProps;
   if (logo && logo.innerLink) {
     navbarBrandProps = {
       to: logo.innerLink,
-      tag: Link
+      tag: Link,
     };
   } else if (logo && logo.outterLink) {
     navbarBrandProps = {
       href: logo.outterLink,
-      target: "_blank"
+      target: "_blank",
     };
   }
 
-  return (
+  const navigate = useNavigate();
+
+  return loggedIn ? (
     <Navbar
-      className="navbar-vertical fixed-left navbar-light bg-white"
+      className="navbar-vertical fixed-left navbar-dark bg-dark"
       expand="md"
       id="sidenav-main"
     >
@@ -119,30 +128,12 @@ const Sidebar = (props) => {
         {/* Brand */}
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
-            <img
-              alt={logo.imgAlt}
-              className="navbar-brand-img"
-              src={logo.imgSrc}
-            />
+            {/* <img src="" alt="logo" /> */}
+            Momo 2 dollar
           </NavbarBrand>
         ) : null}
         {/* User */}
         <Nav className="align-items-center d-md-none">
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
-            </DropdownToggle>
-            <DropdownMenu
-              aria-labelledby="navbar-default_dropdown_1"
-              className="dropdown-menu-arrow"
-              right
-            >
-              <DropdownItem>Action</DropdownItem>
-              <DropdownItem>Another action</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Something else here</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
           <UncontrolledDropdown nav>
             <DropdownToggle nav>
               <Media className="align-items-center">
@@ -162,19 +153,6 @@ const Sidebar = (props) => {
                 <i className="ni ni-single-02" />
                 <span>My profile</span>
               </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-settings-gear-65" />
-                <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-calendar-grid-58" />
-                <span>Activity</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-support-16" />
-                <span>Support</span>
-              </DropdownItem>
-              <DropdownItem divider />
               <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                 <i className="ni ni-user-run" />
                 <span>Logout</span>
@@ -190,13 +168,9 @@ const Sidebar = (props) => {
               {logo ? (
                 <Col className="collapse-brand" xs="6">
                   {logo.innerLink ? (
-                    <Link to={logo.innerLink}>
-                      <img alt={logo.imgAlt} src={logo.imgSrc} />
-                    </Link>
+                    <Link to={logo.innerLink}>Flexicoins</Link>
                   ) : (
-                    <a href={logo.outterLink}>
-                      <img alt={logo.imgAlt} src={logo.imgSrc} />
-                    </a>
+                    <a href={logo.outterLink}>Flexicoins</a>
                   )}
                 </Col>
               ) : null}
@@ -233,33 +207,134 @@ const Sidebar = (props) => {
           {/* Divider */}
           <hr className="my-3" />
           {/* Heading */}
-          <h6 className="navbar-heading text-muted">Documentation</h6>
+          <h6 className="navbar-heading text-muted">Transactions</h6>
+          {/* Navigation */}
+          <Nav className="mb-md-3" navbar>
+            <Link to="/deposit">
+              <NavItem>
+                <NavLink>
+                  <i className="ni ni-spaceship" />
+                  Deposit
+                </NavLink>
+              </NavItem>
+            </Link>
+            <Link to="/withdraw">
+              <NavItem>
+                <NavLink>
+                  <i className="ni ni-palette" />
+                  Withdraw
+                </NavLink>
+              </NavItem>
+            </Link>
+          </Nav>
+          <Button
+            className="mt-5"
+            onClick={async () => {
+              alert("You're about to log out");
+              try {
+                await signOut(auth);
+
+                navigate("/auth/login");
+              } catch (error) {
+                toast.error(error.code);
+              }
+            }}
+          >
+            Logout
+          </Button>
+        </Collapse>
+      </Container>
+    </Navbar>
+  ) : (
+    <Navbar
+      className="navbar-vertical fixed-left navbar-dark bg-dark"
+      expand="md"
+      id="sidenav-main"
+    >
+      <Container fluid>
+        {/* Toggler */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleCollapse}
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
+        {/* Brand */}
+        {logo ? (
+          <NavbarBrand className="pt-0" {...navbarBrandProps}>
+            {/* <img src="" alt="logo" /> */}
+            Momo 2 dollar
+          </NavbarBrand>
+        ) : null}
+        {/* User */}
+        <Nav className="align-items-center d-md-none">
+          <UncontrolledDropdown nav>
+            <DropdownToggle nav>
+              <Button>Join Us</Button>
+            </DropdownToggle>
+
+            <DropdownMenu className="dropdown-menu-arrow" right>
+              <DropdownItem to="/auth/register" tag={Link}>
+                <i className="ni ni-single-02" />
+                <span>Register</span>
+              </DropdownItem>
+              <DropdownItem to="/auth/login" tag={Link}>
+                <i className="ni ni-user-run" />
+                <span>Log in</span>
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
+        </Nav>
+        {/* Collapse */}
+        <Collapse navbar isOpen={collapseOpen}>
+          {/* Collapse header */}
+          <div className="navbar-collapse-header d-md-none">
+            <Row>
+              {logo ? (
+                <Col className="collapse-brand" xs="6">
+                  {logo.innerLink ? (
+                    <Link to={logo.innerLink} className="text-dark fw-bolder">
+                      Momo 2 dollar
+                    </Link>
+                  ) : (
+                    <a href={logo.outterLink} className="fw-bolder">
+                      Momo 2 dollar
+                    </a>
+                  )}
+                </Col>
+              ) : null}
+              <Col className="collapse-close" xs="6">
+                <button
+                  className="navbar-toggler"
+                  type="button"
+                  onClick={toggleCollapse}
+                >
+                  <span />
+                  <span />
+                </button>
+              </Col>
+            </Row>
+          </div>
+
+          {/* Navigation */}
+          <h4 className="fw-light text-danger">You're Not signed in</h4>
+          {/* Divider */}
+          <hr className="my-3" />
+          {/* Heading */}
+          <h6 className="navbar-heading text-muted">Want to Earn?</h6>
           {/* Navigation */}
           <Nav className="mb-md-3" navbar>
             <NavItem>
-              <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
+              <NavLink to="/auth/register" tag={Link}>
                 <i className="ni ni-spaceship" />
-                Getting started
+                Register
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/colors?ref=adr-admin-sidebar">
+              <NavLink to="/auth/login" tag={Link}>
                 <i className="ni ni-palette" />
-                Foundation
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/alerts?ref=adr-admin-sidebar">
-                <i className="ni ni-ui-04" />
-                Components
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <Nav className="mb-md-3" navbar>
-            <NavItem className="active-pro active">
-              <NavLink href="https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=adr-admin-sidebar">
-                <i className="ni ni-spaceship" />
-                Upgrade to PRO
+                Login
               </NavLink>
             </NavItem>
           </Nav>
@@ -267,27 +342,6 @@ const Sidebar = (props) => {
       </Container>
     </Navbar>
   );
-};
-
-Sidebar.defaultProps = {
-  routes: [{}]
-};
-
-Sidebar.propTypes = {
-  // links that will be displayed inside the component
-  routes: PropTypes.arrayOf(PropTypes.object),
-  logo: PropTypes.shape({
-    // innerLink is for links that will direct the user within the app
-    // it will be rendered as <Link to="...">...</Link> tag
-    innerLink: PropTypes.string,
-    // outterLink is for links that will direct the user outside the app
-    // it will be rendered as simple <a href="...">...</a> tag
-    outterLink: PropTypes.string,
-    // the image src of the logo
-    imgSrc: PropTypes.string.isRequired,
-    // the alt for the img
-    imgAlt: PropTypes.string.isRequired
-  })
 };
 
 export default Sidebar;

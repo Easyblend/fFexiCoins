@@ -18,6 +18,14 @@
 
 // reactstrap components
 import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { useState } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
+import {
   Button,
   Card,
   CardHeader,
@@ -29,10 +37,38 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col,
 } from "reactstrap";
+import { auth } from "variables/FirebaseConfig";
+
+import { useNavigate } from "react-router-dom-v5-compat";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const logIn = async (e) => {
+    e.preventDefault();
+    try {
+      await toast.promise(signInWithEmailAndPassword(auth, email, password), {
+        pending: "Signing in",
+        success: "successful",
+        error: "Signing in failed",
+      });
+      navigate("/admin");
+    } catch (error) {
+      toast.error(error.code);
+    }
+  };
+  const provider = GoogleAuthProvider();
+  const googleSignUp = async () => {
+    await signInWithPopup((auth, provider), (result) => {
+      alert(result.user.displayName);
+    });
+  };
+
   return (
     <>
       <Col lg="5" md="7">
@@ -43,26 +79,8 @@ const Login = () => {
             </div>
             <div className="btn-wrapper text-center">
               <Button
-                className="btn-neutral btn-icon"
+                className="btn-neutral btn-icon w-75"
                 color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
                 onClick={(e) => e.preventDefault()}
               >
                 <span className="btn-inner--icon">
@@ -82,7 +100,7 @@ const Login = () => {
             <div className="text-center text-muted mb-4">
               <small>Or sign in with credentials</small>
             </div>
-            <Form role="form">
+            <Form role="form" onSubmit={logIn}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -94,6 +112,8 @@ const Login = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -107,6 +127,8 @@ const Login = () => {
                   <Input
                     placeholder="Password"
                     type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     autoComplete="new-password"
                   />
                 </InputGroup>
@@ -125,8 +147,8 @@ const Login = () => {
                 </label>
               </div>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
-                  Sign in
+                <Button className="my-4" color="primary" type="submit">
+                  Log in
                 </Button>
               </div>
             </Form>
@@ -134,22 +156,14 @@ const Login = () => {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
+            <Link to="/auth/resetpassword" className="text-light">
               <small>Forgot password?</small>
-            </a>
+            </Link>
           </Col>
           <Col className="text-right" xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
+            <Link to="/auth/register" className="text-light">
               <small>Create new account</small>
-            </a>
+            </Link>
           </Col>
         </Row>
       </Col>
