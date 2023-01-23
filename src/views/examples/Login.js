@@ -46,6 +46,8 @@ import { useNavigate } from "react-router-dom-v5-compat";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [photoURL, setPhotoUrl] = useState("");
 
   const navigate = useNavigate();
 
@@ -62,11 +64,17 @@ const Login = () => {
       toast.error(error.code);
     }
   };
-  const provider = GoogleAuthProvider();
-  const googleSignUp = async () => {
-    await signInWithPopup((auth, provider), (result) => {
-      alert(result.user.displayName);
-    });
+  const provider = new GoogleAuthProvider();
+
+  const googleSignUp = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        setEmail(result.user.email);
+        setName(result.user.displayName);
+        setPhotoUrl(result.user.photoURL);
+        navigate("/admin");
+      })
+      .catch((error) => toast.error("This error occured: " + error.code));
   };
 
   return (
@@ -81,7 +89,7 @@ const Login = () => {
               <Button
                 className="btn-neutral btn-icon w-75"
                 color="default"
-                onClick={(e) => e.preventDefault()}
+                onClick={googleSignUp}
               >
                 <span className="btn-inner--icon">
                   <img

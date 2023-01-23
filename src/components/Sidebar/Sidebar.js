@@ -110,6 +110,20 @@ const Sidebar = (props) => {
 
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
+  const [photoURL, setPhotoUrl] = useState(
+    "https://www.grovenetworks.com/images/easyblog_shared/July_2018/7-4-18/b2ap3_large_totw_network_profile_400.jpg"
+  );
+
+  const getUser = () => {
+    onAuthStateChanged(auth, (user) => {
+      setName(user.displayName);
+      setPhotoUrl(user.photoURL);
+    });
+  };
+
+  useEffect(getUser, [name, photoURL]);
+
   return loggedIn ? (
     <Navbar
       className="navbar-vertical fixed-left navbar-dark bg-dark"
@@ -129,7 +143,7 @@ const Sidebar = (props) => {
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
             {/* <img src="" alt="logo" /> */}
-            Momo 2 dollar
+            FlexiCoins
           </NavbarBrand>
         ) : null}
         {/* User */}
@@ -138,22 +152,29 @@ const Sidebar = (props) => {
             <DropdownToggle nav>
               <Media className="align-items-center">
                 <span className="avatar avatar-sm rounded-circle">
-                  <img
-                    alt="..."
-                    src={require("../../assets/img/theme/team-1-800x800.jpg")}
-                  />
+                  <img alt="..." src={photoURL} />
                 </span>
               </Media>
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>
               <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!</h6>
+                <h6 className="text-overflow m-0">{name}</h6>
               </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-single-02" />
                 <span>My profile</span>
               </DropdownItem>
-              <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+              <DropdownItem
+                onClick={async () => {
+                  alert("You're logging Out");
+                  try {
+                    await signOut(auth);
+                    navigate("/login");
+                  } catch (error) {
+                    toast.error("Error: " + error.code);
+                  }
+                }}
+              >
                 <i className="ni ni-user-run" />
                 <span>Logout</span>
               </DropdownItem>

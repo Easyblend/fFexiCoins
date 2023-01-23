@@ -15,61 +15,63 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
+import { toast } from "react-toastify";
 // reactstrap components
 import {
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
   Media,
 } from "reactstrap";
+import { auth } from "variables/FirebaseConfig";
 
 const AdminNavbar = (props) => {
+  const [name, setName] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(
+    "https://www.grovenetworks.com/images/easyblog_shared/July_2018/7-4-18/b2ap3_large_totw_network_profile_400.jpg"
+  );
+
+  const naviagte = useNavigate();
+
+  const getUser = () => {
+    onAuthStateChanged(auth, (user) => {
+      setName(user.displayName);
+      setPhotoUrl(user.photoURL);
+      console.log(photoUrl);
+    });
+  };
+
+  useEffect(getUser, [name]);
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
           <Link
-            className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+            className="h2 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
             {props.brandText}
           </Link>
-          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-            <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
-            </FormGroup>
-          </Form>
+
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="..."
-                      src={require("../../assets/img/theme/team-4-800x800.jpg")}
-                    />
+                    <img alt="..." src={photoUrl} />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      {name}
                     </span>
                   </Media>
                 </Media>
@@ -82,7 +84,17 @@ const AdminNavbar = (props) => {
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem
+                  onClick={async () => {
+                    try {
+                      alert("Loging out");
+                      await signOut(auth);
+                      naviagte("/login");
+                    } catch (error) {
+                      toast.error("this error occured: " + error.code);
+                    }
+                  }}
+                >
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>
