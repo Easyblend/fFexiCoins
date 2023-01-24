@@ -118,11 +118,13 @@ const Sidebar = (props) => {
   const getUser = () => {
     onAuthStateChanged(auth, (user) => {
       setName(user.displayName);
-      setPhotoUrl(user.photoURL);
+      if (user.photoURL) {
+        setPhotoUrl(user.photoURL);
+      }
     });
   };
 
-  useEffect(getUser, [name, photoURL]);
+  useEffect(getUser, []);
 
   return loggedIn ? (
     <Navbar
@@ -234,22 +236,33 @@ const Sidebar = (props) => {
             <Link to="/deposit">
               <NavItem>
                 <NavLink>
-                  <i className="ni ni-spaceship" />
-                  Deposit
+                  <i class="fa-solid fa-money-bill-1"></i>
+                  Buy Currency
+                </NavLink>
+              </NavItem>
+            </Link>
+            <Link to="/deposit">
+              <NavItem>
+                <NavLink>
+                  <i class="fa-brands fa-bitcoin "></i>
+                  Buy Crypto
                 </NavLink>
               </NavItem>
             </Link>
             <Link to="/withdraw">
               <NavItem>
                 <NavLink>
-                  <i className="ni ni-palette" />
-                  Withdraw
+                  <Button className="w-100 btn-success">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                    Withdraw
+                  </Button>
                 </NavLink>
               </NavItem>
             </Link>
           </Nav>
+          <h6 className="navbar-heading text-muted mt-3">Account</h6>
           <Button
-            className="mt-5"
+            className="btn-secondary"
             onClick={async () => {
               alert("You're about to log out");
               try {
@@ -285,7 +298,7 @@ const Sidebar = (props) => {
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
             {/* <img src="" alt="logo" /> */}
-            Momo 2 dollar
+            FlexiCoins
           </NavbarBrand>
         ) : null}
         {/* User */}

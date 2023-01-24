@@ -23,7 +23,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -46,8 +46,6 @@ import { useNavigate } from "react-router-dom-v5-compat";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [photoURL, setPhotoUrl] = useState("");
 
   const navigate = useNavigate();
 
@@ -70,8 +68,7 @@ const Login = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         setEmail(result.user.email);
-        setName(result.user.displayName);
-        setPhotoUrl(result.user.photoURL);
+
         navigate("/admin");
       })
       .catch((error) => toast.error("This error occured: " + error.code));

@@ -16,7 +16,7 @@
 
 */
 import React from "react";
-import { useLocation, Route, Switch, Redirect } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
 
@@ -24,15 +24,12 @@ import { Container, Row, Col } from "reactstrap";
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 
-import routes from "routes.js";
 import Login from "views/examples/Login";
 import Register from "views/examples/Register";
 
 const Auth = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
-
-  console.log(props.location.pathname);
 
   React.useEffect(() => {
     document.body.classList.add("bg-default");
@@ -45,22 +42,6 @@ const Auth = (props) => {
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
   }, [location]);
-
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/auth") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
 
   return (
     <>

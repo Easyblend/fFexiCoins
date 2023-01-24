@@ -17,9 +17,24 @@
 */
 
 // reactstrap components
+import { onAuthStateChanged, updateEmail, updateProfile } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Button, Container, Row, Col } from "reactstrap";
+import { auth } from "variables/FirebaseConfig";
 
-const UserHeader = () => {
+const UserHeader = ({ edit, setEdit, name, setEmail, email, setName }) => {
+  const [currenUser, setCurrentUser] = useState();
+  const getUser = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+      }
+    });
+  };
+
+  useEffect(getUser, []);
+
   return (
     <>
       <div
@@ -29,7 +44,7 @@ const UserHeader = () => {
           backgroundImage:
             "url(" + require("../../assets/img/theme/profile-cover.jpg") + ")",
           backgroundSize: "cover",
-          backgroundPosition: "center top"
+          backgroundPosition: "center top",
         }}
       >
         {/* Mask */}
@@ -38,18 +53,54 @@ const UserHeader = () => {
         <Container className="d-flex align-items-center" fluid>
           <Row>
             <Col lg="7" md="10">
-              <h1 className="display-2 text-white">Hello Jesse</h1>
+              <h1 className="display-3 text-white">Hello {name}</h1>
               <p className="text-white mt-0 mb-5">
-                This is your profile page. You can see the progress you've made
-                with your work and manage your projects or assigned tasks
+                This is your profile page. You can make changes to your details
+                and view them right here. Dont Hesistate to share your referal
+                code. You earn anytime a user makes purchase with it
               </p>
-              <Button
-                color="info"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                Edit profile
-              </Button>
+              {edit ? (
+                <Button
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    setEdit(false);
+                    if (name && name !== currenUser.displayName) {
+                      try {
+                        toast.promise(
+                          updateProfile(auth.currentUser, {
+                            displayName: name,
+                          }),
+                          {
+                            pending: "updating changes",
+                            success: "Name changed successfully",
+                          }
+                        );
+                      } catch (error) {
+                        toast.warn(error.code);
+                      }
+                    }
+                    if (email && email !== currenUser.email) {
+                      toast.promise(updateEmail(auth.currentUser, email), {
+                        pending: "Updating email",
+                        success: "Email successfully update",
+                        error: "Failed to update email",
+                      });
+                    }
+                  }}
+                >
+                  Save Changes
+                </Button>
+              ) : (
+                <Button
+                  color="info"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setEdit(true);
+                  }}
+                >
+                  Edit profile
+                </Button>
+              )}
             </Col>
           </Row>
         </Container>

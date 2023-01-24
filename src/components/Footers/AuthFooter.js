@@ -38,7 +38,7 @@ const Login = () => {
               <Nav className="nav-footer justify-content-center justify-content-xl-end">
                 <NavItem>
                   <NavLink href="" target="_blank">
-                    FlexiCoins.co
+                    FlexiCoins.com
                   </NavLink>
                 </NavItem>
                 <NavItem>

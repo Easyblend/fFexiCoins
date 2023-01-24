@@ -19,11 +19,10 @@
 // reactstrap components
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthFooter from "components/Footers/AuthFooter";
+
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,

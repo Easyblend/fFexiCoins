@@ -36,15 +36,13 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Traffic
+                          USD
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          350,897
-                        </span>
+                        <span className="h2 font-weight-bold mb-0">0 $</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                          <i className="fas fa-chart-bar" />
+                          <i class="fa-solid fa-dollar-sign"></i>
                         </div>
                       </Col>
                     </Row>
@@ -66,13 +64,13 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          New users
+                          Pound sterling
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">2,356</span>
+                        <span className="h2 font-weight-bold mb-0">0 £</span>
                       </div>
                       <Col className="col-auto">
-                        <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                          <i className="fas fa-chart-pie" />
+                        <div className="icon icon-shape  bg-default text-white rounded-circle shadow">
+                          <i class="fa-solid fa-sterling-sign"></i>
                         </div>
                       </Col>
                     </Row>
@@ -94,13 +92,13 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Sales
+                          BTC
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">924</span>
+                        <span className="h2 font-weight-bold mb-0">0.0046</span>
                       </div>
                       <Col className="col-auto">
-                        <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                          <i className="fas fa-users" />
+                        <div className="icon icon-shape bg-warning  text-white rounded-circle shadow">
+                          <i class="fa-brands fa-bitcoin"></i>
                         </div>
                       </Col>
                     </Row>
@@ -122,13 +120,13 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Performance
+                          ETH
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">49,65%</span>
+                        <span className="h2 font-weight-bold mb-0">0.2839</span>
                       </div>
                       <Col className="col-auto">
-                        <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                          <i className="fas fa-percent" />
+                        <div className="icon icon-shape bg-dark text-white rounded-circle shadow">
+                          <i class="fa-brands fa-ethereum"></i>
                         </div>
                       </Col>
                     </Row>

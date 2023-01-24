@@ -44,12 +44,15 @@ const AdminNavbar = (props) => {
   const getUser = () => {
     onAuthStateChanged(auth, (user) => {
       setName(user.displayName);
-      setPhotoUrl(user.photoURL);
-      console.log(photoUrl);
+      if (user.photoURL) {
+        setPhotoUrl(user.photoURL);
+      }
     });
   };
 
-  useEffect(getUser, [name]);
+  useEffect(getUser, []);
+
+  console.log(photoUrl);
 
   return (
     <>

@@ -35,7 +35,12 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "variables/FirebaseConfig";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom-v5-compat";
@@ -43,21 +48,40 @@ import { useNavigate } from "react-router-dom-v5-compat";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [password, setPassword] = useState("");
 
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
 
-  const googleSignUp = () => {
+  const googleSignUp = (e) => {
+    e.preventDefault();
     signInWithPopup(auth, provider)
       .then((result) => {
         setName(result.user.displayName);
         setEmail(result.user.email);
-        setPhotoUrl(result.user.photoURL);
+
         toast.success("Welcome " + result.user.displayName);
         navigate("/admin");
       })
       .catch((error) => toast.error("This issue occured: " + error.code));
+  };
+
+  const [agree, setAgree] = useState(false);
+
+  const createAccount = (e) => {
+    e.preventDefault();
+    if (agree) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((credential) => {
+          const user = credential.user;
+          updateProfile(user, { displayName: name });
+          navigate("/admin");
+          toast.success(`Welcome ${name}`);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      toast.warn("agree to terms to proceed");
+    }
   };
 
   return (
@@ -91,7 +115,7 @@ const Register = () => {
             <div className="text-center text-muted mb-4">
               <small>Or sign up with credentials</small>
             </div>
-            <Form role="form">
+            <Form role="form" onSubmit={createAccount}>
               <FormGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
@@ -99,7 +123,13 @@ const Register = () => {
                       <i className="ni ni-hat-3" />
                     </InputGroupText>
                   </InputGroupAddon>
-                  <Input placeholder="Name" type="text" />
+                  <Input
+                    placeholder="Full Name"
+                    type="text"
+                    value={name}
+                    required
+                    onChange={(e) => setName(e.target.value)}
+                  />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -113,6 +143,9 @@ const Register = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    value={email}
+                    required
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -126,7 +159,10 @@ const Register = () => {
                   <Input
                     placeholder="Password"
                     type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     autoComplete="new-password"
+                    required
                   />
                 </InputGroup>
               </FormGroup>
@@ -138,6 +174,7 @@ const Register = () => {
                       className="custom-control-input"
                       id="customCheckRegister"
                       type="checkbox"
+                      onChange={() => setAgree(!agree)}
                     />
                     <label
                       className="custom-control-label"
@@ -145,19 +182,14 @@ const Register = () => {
                     >
                       <span className="text-muted">
                         I agree with the{" "}
-                        <a
-                          href="https://crypto-policy.tech/"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          Privacy Policy
-                        </a>
+                        <a href="https://crypto-policy.tech/">Privacy Policy</a>
                       </span>
                     </label>
                   </div>
                 </Col>
               </Row>
               <div className="text-center">
-                <Button className="mt-4" color="primary" type="button">
+                <Button className="mt-4" color="primary" type="submit">
                   Create account
                 </Button>
               </div>

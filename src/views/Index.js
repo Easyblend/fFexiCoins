@@ -35,7 +35,7 @@ import {
   Table,
   Container,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 
 // core components
@@ -43,12 +43,14 @@ import {
   chartOptions,
   parseOptions,
   chartExample1,
-  chartExample2
+  chartExample2,
 } from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
+import { collection, getDocs } from "firebase/firestore";
+import { database } from "variables/FirebaseConfig";
 
-const Index = (props) => {
+const Index = () => {
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
 
@@ -61,6 +63,19 @@ const Index = (props) => {
     setActiveNav(index);
     setChartExample1Data("data" + index);
   };
+
+  //Databse setUp
+
+  const getData = async () => {
+    const querySnapshot = await getDocs(collection(database, "Investors"));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
+  };
+
+  getData();
+
   return (
     <>
       <Header />
@@ -82,7 +97,7 @@ const Index = (props) => {
                       <NavItem>
                         <NavLink
                           className={classnames("py-2 px-3", {
-                            active: activeNav === 1
+                            active: activeNav === 1,
                           })}
                           href="#pablo"
                           onClick={(e) => toggleNavs(e, 1)}
@@ -94,7 +109,7 @@ const Index = (props) => {
                       <NavItem>
                         <NavLink
                           className={classnames("py-2 px-3", {
-                            active: activeNav === 2
+                            active: activeNav === 2,
                           })}
                           data-toggle="tab"
                           href="#pablo"
@@ -136,8 +151,16 @@ const Index = (props) => {
                 {/* Chart */}
                 <div className="chart">
                   <Bar
-                    data={chartExample2.data}
-                    options={chartExample2.options}
+                    data={{
+                      labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+                      datasets: [
+                        {
+                          label: "Sales",
+                          data: [25, 5, 30, 22, 17, 29, 9],
+                          maxBarThickness: 10,
+                        },
+                      ],
+                    }}
                   />
                 </div>
               </CardBody>

@@ -27,15 +27,66 @@ import {
   Input,
   Container,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "variables/FirebaseConfig";
+import { toast } from "react-toastify";
 
 const Profile = () => {
+  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [secondName, setSecondName] = useState("");
+  const [email, setEmail] = useState("");
+  const [photoURL, setPhotoUrl] = useState(
+    "https://www.grovenetworks.com/images/easyblog_shared/July_2018/7-4-18/b2ap3_large_totw_network_profile_400.jpg"
+  );
+
+  const [code, setCode] = useState("");
+
+  const getUser = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const fullName = user.displayName;
+
+        setCode(user.uid);
+        setName(user.displayName);
+        setEmail(user.email);
+
+        if (fullName) {
+          const separateName = fullName.split(" ");
+          setFirstName(separateName[0]);
+          if (separateName.length > 1) {
+            setSecondName(separateName[1]);
+          }
+        } else {
+          setFirstName("enter first name");
+          setSecondName("enter second name");
+        }
+
+        if (user.photoURL) {
+          setPhotoUrl(user.photoURL);
+        }
+      }
+    });
+  };
+
+  useEffect(getUser, []);
+  const [edit, setEdit] = useState(false);
   return (
     <>
-      <UserHeader />
+      <UserHeader
+        edit={edit}
+        setEdit={setEdit}
+        name={name}
+        setName={setName}
+        email={email}
+        setEmail={setEmail}
+        photoURL={photoURL}
+      />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -48,7 +99,7 @@ const Profile = () => {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                        src={photoURL}
                       />
                     </a>
                   </div>
@@ -76,33 +127,12 @@ const Profile = () => {
                   </Button>
                 </div>
               </CardHeader>
-              <CardBody className="pt-0 pt-md-4">
-                <Row>
-                  <div className="col">
-                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
-                      <div>
-                        <span className="heading">22</span>
-                        <span className="description">Friends</span>
-                      </div>
-                      <div>
-                        <span className="heading">10</span>
-                        <span className="description">Photos</span>
-                      </div>
-                      <div>
-                        <span className="heading">89</span>
-                        <span className="description">Comments</span>
-                      </div>
-                    </div>
-                  </div>
-                </Row>
+              <CardBody className="mt-4 pt-md-4 ">
                 <div className="text-center">
-                  <h3>
-                    Jessica Jones
-                    <span className="font-weight-light">, 27</span>
-                  </h3>
+                  <h2>{name}</h2>
                   <div className="h5 font-weight-300">
                     <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
+                    {email}
                   </div>
                   <div className="h5 mt-4">
                     <i className="ni business_briefcase-24 mr-2" />
@@ -132,16 +162,6 @@ const Profile = () => {
                   <Col xs="8">
                     <h3 className="mb-0">My account</h3>
                   </Col>
-                  <Col className="text-right" xs="4">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Settings
-                    </Button>
-                  </Col>
                 </Row>
               </CardHeader>
               <CardBody>
@@ -157,14 +177,16 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-username"
                           >
-                            Username
+                            Full Name
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="lucky.jesse"
+                            defaultValue={name}
                             id="input-username"
                             placeholder="Username"
                             type="text"
+                            onChange={(e) => setName(e.target.value)}
+                            disabled={!edit}
                           />
                         </FormGroup>
                       </Col>
@@ -179,8 +201,11 @@ const Profile = () => {
                           <Input
                             className="form-control-alternative"
                             id="input-email"
-                            placeholder="jesse@example.com"
+                            placeholder="email"
                             type="email"
+                            defaultValue={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            disabled={!edit}
                           />
                         </FormGroup>
                       </Col>
@@ -196,10 +221,11 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Lucky"
+                            defaultValue={firstName}
                             id="input-first-name"
                             placeholder="First name"
                             type="text"
+                            disabled
                           />
                         </FormGroup>
                       </Col>
@@ -213,10 +239,11 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Jesse"
+                            defaultValue={secondName}
                             id="input-last-name"
                             placeholder="Last name"
                             type="text"
+                            disabled
                           />
                         </FormGroup>
                       </Col>
@@ -224,78 +251,37 @@ const Profile = () => {
                   </div>
                   <hr className="my-4" />
                   {/* Address */}
-                  <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                  </h6>
+                  <h4 className=" mb-4 text-info">Referal Code</h4>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            id="input-address"
-                            placeholder="Home Address"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="4">
+                      <Col lg="10">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-city"
                           >
-                            City
+                            Earn point anytime a user deposits with your code
                           </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="New York"
-                            id="input-city"
-                            placeholder="City"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
-                            Country
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="United States"
-                            id="input-country"
-                            placeholder="Country"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
-                            Postal code
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-postal-code"
-                            placeholder="Postal code"
-                            type="number"
-                          />
+                          <div className="d-flex ">
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue={code}
+                              id="input-city"
+                              placeholder="City"
+                              type="text"
+                              disabled
+                            />
+                            <Button
+                              className="ml-3"
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(code);
+                                toast.success("Text copied");
+                              }}
+                            >
+                              Copy
+                            </Button>
+                          </div>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -305,16 +291,22 @@ const Profile = () => {
                   <h6 className="heading-small text-muted mb-4">About me</h6>
                   <div className="pl-lg-4">
                     <FormGroup>
-                      <label>About Me</label>
+                      <label>Send us a message</label>
                       <Input
                         className="form-control-alternative"
-                        placeholder="A few words about you ..."
+                        placeholder="Tell us what you'd love to be done for you ..."
                         rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                        Open Source."
+                        defaultValue="How do I make a deposit and earn my first profit..."
                         type="textarea"
                       />
                     </FormGroup>
+                    <Button
+                      type="button"
+                      className="btn-info"
+                      href="mailto:somewhere"
+                    >
+                      Send
+                    </Button>
                   </div>
                 </Form>
               </CardBody>

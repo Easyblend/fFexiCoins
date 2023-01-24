@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
@@ -27,7 +27,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 import routes from "routes.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "variables/FirebaseConfig";
-import { Navigate, useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom-v5-compat";
 
 const Admin = (props) => {
   const mainContent = React.useRef(null);
@@ -80,6 +80,8 @@ const Admin = (props) => {
 
   useEffect(checkUser, []);
 
+  const [modal, setModal] = useState(true);
+
   return (
     <>
       <Sidebar
@@ -96,6 +98,7 @@ const Admin = (props) => {
           {...props}
           brandText={getBrandText(props.location.pathname)}
         />
+        {modal ? <h1>Hellpasopas</h1> : ""}
         <Switch>
           {getRoutes(routes)}
           <Redirect from="*" to="/admin/index" />
