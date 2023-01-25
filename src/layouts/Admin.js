@@ -75,7 +75,7 @@ const Admin = (props) => {
   const options = {
     method: "GET",
     headers: {
-      "X-RapidAPI-Key": "3a715ecf6dmsh42d397b5484cb27p1a146ejsn3a01e7e8200b",
+      "X-RapidAPI-Key": process.env.REACT_APP_CURRENCY_API,
       "X-RapidAPI-Host": "currency-converter-by-api-ninjas.p.rapidapi.com",
     },
   };
