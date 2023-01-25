@@ -233,32 +233,40 @@ const Sidebar = (props) => {
           <h6 className="navbar-heading text-muted">Transactions</h6>
           {/* Navigation */}
           <Nav className="mb-md-3" navbar>
-            <Link to="/deposit">
-              <NavItem>
-                <NavLink>
-                  <i class="fa-solid fa-money-bill-1"></i>
-                  Buy Currency
-                </NavLink>
-              </NavItem>
-            </Link>
-            <Link to="/deposit">
-              <NavItem>
-                <NavLink>
-                  <i class="fa-brands fa-bitcoin "></i>
-                  Buy Crypto
-                </NavLink>
-              </NavItem>
-            </Link>
-            <Link to="/withdraw">
-              <NavItem>
-                <NavLink>
-                  <Button className="w-100 btn-success">
-                    <i class="fa-solid fa-hand-holding-dollar"></i>
-                    Withdraw
-                  </Button>
-                </NavLink>
-              </NavItem>
-            </Link>
+            <NavItem
+              onClick={() => {
+                props.setModal(true);
+                props.setModal2(false);
+              }}
+              type="button"
+            >
+              <NavLink>
+                <i class="fa-solid fa-money-bill-1"></i>
+                Buy Currency
+              </NavLink>
+            </NavItem>
+
+            <NavItem
+              onClick={() => {
+                props.setModal2(true);
+                props.setModal(false);
+              }}
+              type="button"
+            >
+              <NavLink>
+                <i class="fa-brands fa-bitcoin "></i>
+                Buy Crypto
+              </NavLink>
+            </NavItem>
+
+            <NavItem>
+              <NavLink>
+                <Button className="w-100 btn-success">
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                  Withdraw
+                </Button>
+              </NavLink>
+            </NavItem>
           </Nav>
           <h6 className="navbar-heading text-muted mt-3">Account</h6>
           <Button
@@ -329,11 +337,11 @@ const Sidebar = (props) => {
                 <Col className="collapse-brand" xs="6">
                   {logo.innerLink ? (
                     <Link to={logo.innerLink} className="text-dark fw-bolder">
-                      Momo 2 dollar
+                      FlexiCoins
                     </Link>
                   ) : (
                     <a href={logo.outterLink} className="fw-bolder">
-                      Momo 2 dollar
+                      FlexiCoins
                     </a>
                   )}
                 </Col>

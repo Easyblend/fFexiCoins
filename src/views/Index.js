@@ -66,15 +66,15 @@ const Index = () => {
 
   //Databse setUp
 
-  const getData = async () => {
-    const querySnapshot = await getDocs(collection(database, "Investors"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
-  };
+  // const getData = async () => {
+  //   const querySnapshot = await getDocs(collection(database, "Investors"));
+  //   querySnapshot.forEach((doc) => {
+  //     // doc.data() is never undefined for query doc snapshots
+  //     console.log(doc.id, " => ", doc.data());
+  //   });
+  // };
 
-  getData();
+  // getData();
 
   return (
     <>
