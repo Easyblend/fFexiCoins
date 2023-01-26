@@ -80,6 +80,7 @@ const Admin = (props) => {
     },
   };
 
+  //Getting the current Dollar price in USD
   const getDollarRate = async () => {
     try {
       const response = await fetch(
@@ -93,6 +94,7 @@ const Admin = (props) => {
     }
   };
 
+  //Getting the current Dollar price in GBP
   const getPoundsRate = async () => {
     try {
       const response = await fetch(
@@ -105,6 +107,18 @@ const Admin = (props) => {
       throw error;
     }
   };
+
+  //Getting Crypto Data
+
+  const getCrypto = async () => {
+    const response = await fetch(
+      "https://api.coingecko.com/api/v3/coins/bitcoin"
+    );
+    const data = await response.json();
+    console.log(data.market_data.current_price);
+  };
+
+  useEffect(() => getCrypto);
 
   useEffect(() => getDollarRate);
   useEffect(() => getPoundsRate);
@@ -183,14 +197,14 @@ const Modal = ({
   poundRate,
 }) => {
   return (
-    <div class="container mt-5 px-5">
+    <div className="container mt-5 px-5">
       <Button
         className="btn-danger text-center mx-auto d-flex"
         onClick={() => setModal(false)}
       >
         Abort and Close
       </Button>
-      <div class="mb-4">
+      <div className="mb-4">
         <h2>Confirm Currency purchase</h2>
         <span>
           Payments are secured. Purchasing currency will reflect in your account
@@ -198,16 +212,16 @@ const Modal = ({
         </span>
       </div>
 
-      <div class="row">
-        <div class="col-md-8">
-          <div class="card p-3">
-            <h6 class="text-uppercase">Payment details</h6>
-            <div class="inputbox mt-3">
+      <div className="row">
+        <div className="col-md-8">
+          <div className="card p-3">
+            <h6 className="text-uppercase">Payment details</h6>
+            <div className="inputbox mt-3">
               {" "}
               <input
                 type="text"
                 name="name"
-                class="form-control"
+                className="form-control"
                 required="required"
               />{" "}
               <span>
@@ -215,9 +229,9 @@ const Modal = ({
               </span>{" "}
             </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="inputbox mt-3 mr-2">
+            <div className="row">
+              <div className="col-md-6">
+                <div className="inputbox mt-3 mr-2">
                   {" "}
                   <select
                     name="currency"
@@ -229,7 +243,7 @@ const Modal = ({
                   </select>
                   <div>
                     <label htmlFor="currency">
-                      <i class="fa-solid fa-wallet"></i>{" "}
+                      <i className="fa-solid fa-wallet"></i>{" "}
                       <span>
                         Currency <span className="text-danger">*</span>
                       </span>
@@ -238,47 +252,47 @@ const Modal = ({
                 </div>
               </div>
 
-              <div class="col-md-6">
-                <div class="inputbox mt-3 mr-2">
+              <div className="col-md-6">
+                <div className="inputbox mt-3 mr-2">
                   {" "}
                   <input
                     type="tel"
                     name="name"
-                    class="form-control"
+                    className="form-control"
                     required="required"
                   />{" "}
                   <span>
-                    <i class="fa-solid fa-phone"></i> Phone Number{" "}
+                    <i className="fa-solid fa-phone"></i> Phone Number{" "}
                     <span className="text-danger">*</span>
                   </span>{" "}
                 </div>
               </div>
             </div>
 
-            <div class="mt-4 mb-4">
-              <h6 class="text-uppercase">Purchasing Amount</h6>
+            <div className="mt-4 mb-4">
+              <h6 className="text-uppercase">Purchasing Amount</h6>
 
-              <div class="row mt-3">
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
+              <div className="row mt-3">
+                <div className="col-md-6">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       placeholder="optional"
                     />{" "}
                     <span>Referal Code</span>{" "}
                   </div>
                 </div>
 
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
+                <div className="col-md-6">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="number"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       required="required"
                       value={purchasingAmount}
                       onChange={(e) => setPurchasingAmount(e.target.value)}
@@ -291,58 +305,52 @@ const Modal = ({
                 </div>
               </div>
 
-              <div class="row mt-2">
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
+              <div className="row mt-2">
+                <div className="col-md-6">
+                  <div className="inputbox mt-3 mr-2">
                     <span>What you'll get in USD</span> <span></span>
-                    <input
-                      type="text"
-                      name="name"
-                      class="form-control"
-                      disabled
-                      value={
-                        " USD " +
-                        Number(dollarRate * purchasingAmount).toFixed(2)
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      class="form-control"
-                      required="required"
-                    />{" "}
-                    <span>Zip code</span>{" "}
+                    <div className="d-flex ">
+                      <input
+                        type="text"
+                        name="name"
+                        className="form-control"
+                        disabled
+                        value={
+                          " USD " +
+                          Number(dollarRate * purchasingAmount).toFixed(2)
+                        }
+                      />
+                      <Button
+                        className="btn-secondary ml-3"
+                        onClick={() => setPurchasingAmount(0)}
+                      >
+                        Clear
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="mt-4 mb-4 d-flex justify-content-between">
+          <div className="mt-4 mb-4 d-flex justify-content-between">
             <Button onClick={() => setModal(false)}>Cancel</Button>
-
-            <button class="btn btn-success px-3">
+            <button className="btn btn-success px-3">
               Pay &#8373;{purchasingAmount}
             </button>
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card bg-default p-3 text-white mb-3">
+        <div className="col-md-4">
+          <div className="card bg-default p-3 text-white mb-3">
             <h2 className=" text-info">Conversion Rates</h2>
-            <div class="d-flex flex-row align-items-end mb-3">
-              <h4 class="mb-0 text-secondary">
+            <div className="d-flex flex-row align-items-end mb-3">
+              <h4 className="mb-0 text-secondary">
                 &#8373;1 is equal to USD {dollarRate}{" "}
               </h4>
             </div>
-            <div class="d-flex flex-row align-items-end mb-3">
-              <h4 class="mb-0 text-secondary">
+            <div className="d-flex flex-row align-items-end mb-3">
+              <h4 className="mb-0 text-secondary">
                 &#8373;1 is equal to GBP {poundRate}{" "}
               </h4>
             </div>
@@ -355,14 +363,14 @@ const Modal = ({
 
 const Modal2 = ({ setModal2 }) => {
   return (
-    <div class="container mt-5 px-5">
+    <div className="container mt-5 px-5">
       <Button
         className="btn-danger text-center mx-auto d-flex"
         onClick={() => setModal2(false)}
       >
         Abort and Close
       </Button>
-      <div class="mb-4">
+      <div className="mb-4">
         <h2>Confirm Crypto purchase</h2>
         <span>
           please make the payment, after that you can enjoy all the features and
@@ -370,54 +378,54 @@ const Modal2 = ({ setModal2 }) => {
         </span>
       </div>
 
-      <div class="row">
-        <div class="col-md-8">
-          <div class="card p-3">
-            <h6 class="text-uppercase">Payment details</h6>
-            <div class="inputbox mt-3">
+      <div className="row">
+        <div className="col-md-8">
+          <div className="card p-3">
+            <h6 className="text-uppercase">Payment details</h6>
+            <div className="inputbox mt-3">
               {" "}
               <input
                 type="text"
                 name="name"
-                class="form-control"
+                className="form-control"
                 required="required"
               />{" "}
               <span>Name on card</span>{" "}
             </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="inputbox mt-3 mr-2">
+            <div className="row">
+              <div className="col-md-6">
+                <div className="inputbox mt-3 mr-2">
                   {" "}
                   <input
                     type="text"
                     name="name"
-                    class="form-control"
+                    className="form-control"
                     required="required"
                   />{" "}
-                  <i class="fa fa-credit-card"></i> <span>Card Number</span>
+                  <i className="fa fa-credit-card"></i> <span>Card Number</span>
                 </div>
               </div>
 
-              <div class="col-md-6">
-                <div class="d-flex flex-row">
-                  <div class="inputbox mt-3 mr-2">
+              <div className="col-md-6">
+                <div className="d-flex flex-row">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       required="required"
                     />{" "}
                     <span>Expiry</span>{" "}
                   </div>
 
-                  <div class="inputbox mt-3 mr-2">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       required="required"
                     />{" "}
                     <span>CVV</span>{" "}
@@ -426,30 +434,30 @@ const Modal2 = ({ setModal2 }) => {
               </div>
             </div>
 
-            <div class="mt-4 mb-4">
-              <h6 class="text-uppercase">Billing Address</h6>
+            <div className="mt-4 mb-4">
+              <h6 className="text-uppercase">Billing Address</h6>
 
-              <div class="row mt-3">
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
+              <div className="row mt-3">
+                <div className="col-md-6">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       required="required"
                     />{" "}
                     <span>Street Address</span>{" "}
                   </div>
                 </div>
 
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
+                <div className="col-md-6">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       required="required"
                     />{" "}
                     <span>City</span>{" "}
@@ -457,27 +465,27 @@ const Modal2 = ({ setModal2 }) => {
                 </div>
               </div>
 
-              <div class="row mt-2">
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
+              <div className="row mt-2">
+                <div className="col-md-6">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       required="required"
                     />{" "}
                     <span>State/Province</span>{" "}
                   </div>
                 </div>
 
-                <div class="col-md-6">
-                  <div class="inputbox mt-3 mr-2">
+                <div className="col-md-6">
+                  <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       required="required"
                     />{" "}
                     <span>Zip code</span>{" "}
@@ -487,28 +495,28 @@ const Modal2 = ({ setModal2 }) => {
             </div>
           </div>
 
-          <div class="mt-4 mb-4 d-flex justify-content-between">
+          <div className="mt-4 mb-4 d-flex justify-content-between">
             <Button onClick={() => setModal2(false)}>Cancel</Button>
 
-            <button class="btn btn-success px-3">Pay $840</button>
+            <button className="btn btn-success px-3">Pay $840</button>
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card card-blue p-3 text-white mb-3">
+        <div className="col-md-4">
+          <div className="card card-blue p-3 text-white mb-3">
             <span>You have to pay</span>
-            <div class="d-flex flex-row align-items-end mb-3">
-              <h1 class="mb-0 yellow">$549</h1> <span>.99</span>
+            <div className="d-flex flex-row align-items-end mb-3">
+              <h1 className="mb-0 yellow">$549</h1> <span>.99</span>
             </div>
 
             <span>
               Enjoy all the features and perk after you complete the payment
             </span>
-            <a href="#" class="yellow decoration">
+            <a href="#" className="yellow decoration">
               Know all the features
             </a>
 
-            <div class="hightlight">
+            <div className="hightlight">
               <span>
                 100% Guaranteed support and update for the next 5 years.
               </span>

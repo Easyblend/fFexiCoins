@@ -40,44 +40,44 @@ const MapWrapper = () => {
         {
           featureType: "administrative",
           elementType: "labels.text.fill",
-          stylers: [{ color: "#444444" }]
+          stylers: [{ color: "#444444" }],
         },
         {
           featureType: "landscape",
           elementType: "all",
-          stylers: [{ color: "#f2f2f2" }]
+          stylers: [{ color: "#f2f2f2" }],
         },
         {
           featureType: "poi",
           elementType: "all",
-          stylers: [{ visibility: "off" }]
+          stylers: [{ visibility: "off" }],
         },
         {
           featureType: "road",
           elementType: "all",
-          stylers: [{ saturation: -100 }, { lightness: 45 }]
+          stylers: [{ saturation: -100 }, { lightness: 45 }],
         },
         {
           featureType: "road.highway",
           elementType: "all",
-          stylers: [{ visibility: "simplified" }]
+          stylers: [{ visibility: "simplified" }],
         },
         {
           featureType: "road.arterial",
           elementType: "labels.icon",
-          stylers: [{ visibility: "off" }]
+          stylers: [{ visibility: "off" }],
         },
         {
           featureType: "transit",
           elementType: "all",
-          stylers: [{ visibility: "off" }]
+          stylers: [{ visibility: "off" }],
         },
         {
           featureType: "water",
           elementType: "all",
-          stylers: [{ color: "#5e72e4" }, { visibility: "on" }]
-        }
-      ]
+          stylers: [{ color: "#5e72e4" }, { visibility: "on" }],
+        },
+      ],
     };
 
     map = new google.maps.Map(map, mapOptions);
@@ -86,15 +86,15 @@ const MapWrapper = () => {
       position: myLatlng,
       map: map,
       animation: google.maps.Animation.DROP,
-      title: "Light Bootstrap Dashboard PRO React!"
+      title: "Light Bootstrap Dashboard PRO React!",
     });
 
     const contentString =
-      '<div class="info-window-content"><h2>Light Bootstrap Dashboard PRO React</h2>' +
+      '<div className="info-window-content"><h2>Light Bootstrap Dashboard PRO React</h2>' +
       "<p>A premium Admin for React-Bootstrap, Bootstrap, React, and React Hooks.</p></div>";
 
     const infowindow = new google.maps.InfoWindow({
-      content: contentString
+      content: contentString,
     });
 
     google.maps.event.addListener(marker, "click", function () {

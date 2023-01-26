@@ -241,7 +241,7 @@ const Sidebar = (props) => {
               type="button"
             >
               <NavLink>
-                <i class="fa-solid fa-money-bill-1"></i>
+                <i className="fa-solid fa-money-bill-1"></i>
                 Buy Currency
               </NavLink>
             </NavItem>
@@ -254,7 +254,7 @@ const Sidebar = (props) => {
               type="button"
             >
               <NavLink>
-                <i class="fa-brands fa-bitcoin "></i>
+                <i className="fa-brands fa-bitcoin "></i>
                 Buy Crypto
               </NavLink>
             </NavItem>
@@ -262,7 +262,7 @@ const Sidebar = (props) => {
             <NavItem>
               <NavLink>
                 <Button className="w-100 btn-success">
-                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                  <i className="fa-solid fa-hand-holding-dollar"></i>
                   Withdraw
                 </Button>
               </NavLink>
