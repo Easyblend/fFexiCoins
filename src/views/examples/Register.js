@@ -52,12 +52,8 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [userID, setUserID] = useState("");
-
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
-
-  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   const googleSignUp = (e) => {
     e.preventDefault();
@@ -79,6 +75,7 @@ const Register = () => {
       signIn: "Google",
     });
   };
+
   const sendDataWithDetails = async (user, name, email) => {
     await setDoc(doc(database, "Users", user), {
       name: name,
