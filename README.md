@@ -4,7 +4,7 @@
 
 ![Product Gif](https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-react/argon-dashboard-react.gif)
 
-Start your development with a Dashboard for [Bootstrap 4](https://getbootstrap.com/), [React](https://reactjs.org) and [Reactstrap](https://reactstrap.com), made with [EasyBlend](https://instagram.com/easy_blend93). It is open source, free and it features many components that can help you create amazing websites.
+Start your development with a Dashboard for [Bootstrap 4](https://getbootstrap.com/), [React](https://reactjs.org) and [Reactstrap](https://reactstrap.com) or with the flexicoins creator [EasyBlend](https://instagram.com/easy_blend93). It is open source, free and it features many components that can help you create amazing websites.
 
 **Project Focus**
 
