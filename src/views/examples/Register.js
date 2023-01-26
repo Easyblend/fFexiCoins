@@ -44,14 +44,20 @@ import {
 import { auth } from "variables/FirebaseConfig";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom-v5-compat";
+import { database } from "variables/FirebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [userID, setUserID] = useState("");
+
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
+
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   const googleSignUp = (e) => {
     e.preventDefault();
@@ -59,11 +65,26 @@ const Register = () => {
       .then((result) => {
         setName(result.user.displayName);
         setEmail(result.user.email);
-
         toast.success("Welcome " + result.user.displayName);
         navigate("/admin");
+        sendData(result.user.uid, result.user.displayName, result.user.email);
       })
-      .catch((error) => toast.error("This issue occured: " + error.code));
+      .catch((error) => console.log(error));
+  };
+
+  const sendData = async (user, name, email) => {
+    await setDoc(doc(database, "Users", user), {
+      name: name,
+      email: email,
+      signIn: "Google",
+    });
+  };
+  const sendDataWithDetails = async (user, name, email) => {
+    await setDoc(doc(database, "Users", user), {
+      name: name,
+      email: email,
+      signIn: "Username and Password",
+    });
   };
 
   const [agree, setAgree] = useState(false);
@@ -71,14 +92,19 @@ const Register = () => {
   const createAccount = (e) => {
     e.preventDefault();
     if (agree) {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((credential) => {
-          const user = credential.user;
-          updateProfile(user, { displayName: name });
-          navigate("/admin");
-          toast.success(`Welcome ${name}`);
-        })
-        .catch((error) => console.log(error));
+      try {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((credential) => {
+            const user = credential.user;
+            updateProfile(user, { displayName: name });
+            navigate("/admin");
+            toast.success(`Welcome ${name}`);
+            sendDataWithDetails(user.uid, name, user.email);
+          })
+          .catch((error) => toast.error("error code: " + error.code));
+      } catch (error) {
+        toast.error("error code: " + error.code);
+      }
     } else {
       toast.warn("agree to terms to proceed");
     }

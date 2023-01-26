@@ -28,6 +28,8 @@ import routes from "routes.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "variables/FirebaseConfig";
 import { useNavigate } from "react-router-dom-v5-compat";
+import { database } from "variables/FirebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const Admin = (props) => {
   const mainContent = React.useRef(null);
@@ -72,6 +74,9 @@ const Admin = (props) => {
   const [dollarRate, setDollarRate] = useState();
   const [poundRate, setPoundsRate] = useState();
 
+  const [btcRate, setBtcRate] = useState();
+  const [ethRate, setEthRate] = useState();
+
   const options = {
     method: "GET",
     headers: {
@@ -108,17 +113,26 @@ const Admin = (props) => {
     }
   };
 
-  //Getting Crypto Data
-
-  const getCrypto = async () => {
+  //Getting BTC rate in dollars
+  const getBtcRate = async () => {
     const response = await fetch(
       "https://api.coingecko.com/api/v3/coins/bitcoin"
     );
     const data = await response.json();
-    console.log(data.market_data.current_price);
+    setBtcRate(data.market_data.current_price.usd); //btc price in dollars
   };
 
-  useEffect(() => getCrypto);
+  //get Ethereum Rate in USD
+  const getEthRate = async () => {
+    const response = await fetch(
+      "https://api.coingecko.com/api/v3/coins/ethereum"
+    );
+    const data = await response.json();
+    setEthRate(data.market_data.current_price.usd); //btc price in dollars
+  };
+
+  useEffect(() => getEthRate);
+  useEffect(() => getBtcRate);
 
   useEffect(() => getDollarRate);
   useEffect(() => getPoundsRate);
@@ -196,11 +210,25 @@ const Modal = ({
   setPurchasingAmount,
   poundRate,
 }) => {
+  const [currencyType, setCurrencyType] = useState("");
+  console.log(currencyType);
+
+  const sendData = async () => {
+    await setDoc(doc(database, "Investors", "user"), {
+      name: "Los Angeles",
+      state: "CA",
+      country: "USA",
+    });
+  };
+
   return (
     <div className="container mt-5 px-5">
       <Button
         className="btn-danger text-center mx-auto d-flex"
-        onClick={() => setModal(false)}
+        onClick={() => {
+          setModal(false);
+          sendData();
+        }}
       >
         Abort and Close
       </Button>
@@ -237,9 +265,10 @@ const Modal = ({
                     name="currency"
                     id="currency"
                     className="form-control"
+                    onChange={(e) => setCurrencyType(e.target.value)}
                   >
-                    <option value="volvo">United State Dollars-USD</option>
-                    <option value="saab">Pound Sterling-GBP</option>
+                    <option value="USD">United State Dollars-USD</option>
+                    <option value="GBP">Pound Sterling-GBP</option>
                   </select>
                   <div>
                     <label htmlFor="currency">
@@ -308,18 +337,31 @@ const Modal = ({
               <div className="row mt-2">
                 <div className="col-md-6">
                   <div className="inputbox mt-3 mr-2">
-                    <span>What you'll get in USD</span> <span></span>
+                    <span>What you'll get in {currencyType}</span> <span></span>
                     <div className="d-flex ">
-                      <input
-                        type="text"
-                        name="name"
-                        className="form-control"
-                        disabled
-                        value={
-                          " USD " +
-                          Number(dollarRate * purchasingAmount).toFixed(2)
-                        }
-                      />
+                      {currencyType === "USD" ? (
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          disabled
+                          value={
+                            " USD " +
+                            Number(dollarRate * purchasingAmount).toFixed(2)
+                          }
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          disabled
+                          value={
+                            " GBP " +
+                            Number(poundRate * purchasingAmount).toFixed(2)
+                          }
+                        />
+                      )}
                       <Button
                         className="btn-secondary ml-3"
                         onClick={() => setPurchasingAmount(0)}

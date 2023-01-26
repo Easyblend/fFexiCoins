@@ -33,7 +33,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Momo 2 dollar coporations
+              Flexicoins.com
             </a>
           </div>
         </Col>
