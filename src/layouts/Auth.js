@@ -54,8 +54,10 @@ const Auth = (props) => {
                 <Col lg="5" md="6">
                   <h1 className="text-white">Welcome!</h1>
                   <p className="text-lead text-white">
-                    We are here to make finacing easy and quicker! You dont need
-                    a bank to own a dollar account
+                    We are here to make financing easier and quicker! You dont
+                    need a bank to own a dollar account. With just your mobile
+                    money wallet you can buy a dollar with just a click of a
+                    button
                   </p>
                 </Col>
               </Row>

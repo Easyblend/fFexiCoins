@@ -22,6 +22,8 @@ import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom-v5-compat";
 import { toast } from "react-toastify";
 
+import Logo from "../../assets/fotor_2023-1-25_16_1_8.png";
+
 // reactstrap components
 import {
   Button,
@@ -145,7 +147,8 @@ const Sidebar = (props) => {
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
             {/* <img src="" alt="logo" /> */}
-            FlexiCoins
+            <img src={Logo} alt="Missing" width="auto" height="auto" />{" "}
+            <span className="ml-2">FlexiCoins</span>
           </NavbarBrand>
         ) : null}
         {/* User */}

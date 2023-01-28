@@ -46,6 +46,7 @@ const AdminNavbar = (props) => {
       setName(user.displayName);
       if (user.photoURL) {
         setPhotoUrl(user.photoURL);
+        console.log(user.photoURL);
       }
     });
   };

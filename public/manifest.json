@@ -1,9 +1,9 @@
 {
-  "short_name": "Argon Dashboard React",
-  "name": "Argon Dashboard React by Creative Tim",
+  "short_name": "FlexiCoins",
+  "name": "FlexiCoins",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "../src/assets/fotor_2023-1-25_16_1_8.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

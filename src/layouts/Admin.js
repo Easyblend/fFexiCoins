@@ -29,7 +29,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "variables/FirebaseConfig";
 import { useNavigate } from "react-router-dom-v5-compat";
 import { database } from "variables/FirebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+
+import Modal2 from "views/examples/Modal2";
+import Modal from "views/examples/Modal";
+import { toast } from "react-toastify";
 
 const Admin = (props) => {
   const mainContent = React.useRef(null);
@@ -139,9 +143,15 @@ const Admin = (props) => {
 
   const [purchasingAmount, setPurchasingAmount] = useState(0);
 
+  const [userId, setUserId] = useState();
+
+  const [name, setName] = useState();
+
   const checkUser = () => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
+        setUserId(currentUser.uid);
+        setName(currentUser.displayName);
       } else {
         navigate("/auth/login");
       }
@@ -152,6 +162,21 @@ const Admin = (props) => {
 
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
+
+  const [datas, setDatas] = useState([]);
+
+  const getTransactions = async () => {
+    try {
+      const response = await getDocs(collection(database, "Transactions"));
+      if (response) {
+        console.log(response.size);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => getTransactions);
 
   return (
     <>
@@ -181,9 +206,20 @@ const Admin = (props) => {
                 purchasingAmount={purchasingAmount}
                 setPurchasingAmount={setPurchasingAmount}
                 poundRate={poundRate}
+                userId={userId}
+                name={name}
               />
             ) : null}
-            {modal2 ? <Modal2 setModal2={setModal2} /> : null}
+            {modal2 ? (
+              <Modal2
+                setModal2={setModal2}
+                btcRate={btcRate}
+                ethRate={ethRate}
+                dollarRate={dollarRate}
+                purchasingAmount={purchasingAmount}
+                setPurchasingAmount={setPurchasingAmount}
+              />
+            ) : null}
           </div>
         ) : (
           <Switch>
@@ -202,370 +238,3 @@ const Admin = (props) => {
 };
 
 export default Admin;
-
-const Modal = ({
-  setModal,
-  dollarRate,
-  purchasingAmount,
-  setPurchasingAmount,
-  poundRate,
-}) => {
-  const [currencyType, setCurrencyType] = useState("");
-  console.log(currencyType);
-
-  const sendData = async () => {
-    await setDoc(doc(database, "Investors", "user"), {
-      name: "Los Angeles",
-      state: "CA",
-      country: "USA",
-    });
-  };
-
-  return (
-    <div className="container mt-5 px-5">
-      <Button
-        className="btn-danger text-center mx-auto d-flex"
-        onClick={() => {
-          setModal(false);
-          sendData();
-        }}
-      >
-        Abort and Close
-      </Button>
-      <div className="mb-4">
-        <h2>Confirm Currency purchase</h2>
-        <span>
-          Payments are secured. Purchasing currency will reflect in your account
-          after the paymenr has be confirmed
-        </span>
-      </div>
-
-      <div className="row">
-        <div className="col-md-8">
-          <div className="card p-3">
-            <h6 className="text-uppercase">Payment details</h6>
-            <div className="inputbox mt-3">
-              {" "}
-              <input
-                type="text"
-                name="name"
-                className="form-control"
-                required="required"
-              />{" "}
-              <span>
-                Full Name <span className="text-danger">*</span>
-              </span>{" "}
-            </div>
-
-            <div className="row">
-              <div className="col-md-6">
-                <div className="inputbox mt-3 mr-2">
-                  {" "}
-                  <select
-                    name="currency"
-                    id="currency"
-                    className="form-control"
-                    onChange={(e) => setCurrencyType(e.target.value)}
-                  >
-                    <option value="USD">United State Dollars-USD</option>
-                    <option value="GBP">Pound Sterling-GBP</option>
-                  </select>
-                  <div>
-                    <label htmlFor="currency">
-                      <i className="fa-solid fa-wallet"></i>{" "}
-                      <span>
-                        Currency <span className="text-danger">*</span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div className="inputbox mt-3 mr-2">
-                  {" "}
-                  <input
-                    type="tel"
-                    name="name"
-                    className="form-control"
-                    required="required"
-                  />{" "}
-                  <span>
-                    <i className="fa-solid fa-phone"></i> Phone Number{" "}
-                    <span className="text-danger">*</span>
-                  </span>{" "}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 mb-4">
-              <h6 className="text-uppercase">Purchasing Amount</h6>
-
-              <div className="row mt-3">
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      placeholder="optional"
-                    />{" "}
-                    <span>Referal Code</span>{" "}
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="number"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                      value={purchasingAmount}
-                      onChange={(e) => setPurchasingAmount(e.target.value)}
-                    />{" "}
-                    <span>
-                      Purchasing amount in &#8373;{" "}
-                      <span className="text-danger">*</span>
-                    </span>{" "}
-                  </div>
-                </div>
-              </div>
-
-              <div className="row mt-2">
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    <span>What you'll get in {currencyType}</span> <span></span>
-                    <div className="d-flex ">
-                      {currencyType === "USD" ? (
-                        <input
-                          type="text"
-                          name="name"
-                          className="form-control"
-                          disabled
-                          value={
-                            " USD " +
-                            Number(dollarRate * purchasingAmount).toFixed(2)
-                          }
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          name="name"
-                          className="form-control"
-                          disabled
-                          value={
-                            " GBP " +
-                            Number(poundRate * purchasingAmount).toFixed(2)
-                          }
-                        />
-                      )}
-                      <Button
-                        className="btn-secondary ml-3"
-                        onClick={() => setPurchasingAmount(0)}
-                      >
-                        Clear
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 mb-4 d-flex justify-content-between">
-            <Button onClick={() => setModal(false)}>Cancel</Button>
-            <button className="btn btn-success px-3">
-              Pay &#8373;{purchasingAmount}
-            </button>
-          </div>
-        </div>
-
-        <div className="col-md-4">
-          <div className="card bg-default p-3 text-white mb-3">
-            <h2 className=" text-info">Conversion Rates</h2>
-            <div className="d-flex flex-row align-items-end mb-3">
-              <h4 className="mb-0 text-secondary">
-                &#8373;1 is equal to USD {dollarRate}{" "}
-              </h4>
-            </div>
-            <div className="d-flex flex-row align-items-end mb-3">
-              <h4 className="mb-0 text-secondary">
-                &#8373;1 is equal to GBP {poundRate}{" "}
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Modal2 = ({ setModal2 }) => {
-  return (
-    <div className="container mt-5 px-5">
-      <Button
-        className="btn-danger text-center mx-auto d-flex"
-        onClick={() => setModal2(false)}
-      >
-        Abort and Close
-      </Button>
-      <div className="mb-4">
-        <h2>Confirm Crypto purchase</h2>
-        <span>
-          please make the payment, after that you can enjoy all the features and
-          benefits.
-        </span>
-      </div>
-
-      <div className="row">
-        <div className="col-md-8">
-          <div className="card p-3">
-            <h6 className="text-uppercase">Payment details</h6>
-            <div className="inputbox mt-3">
-              {" "}
-              <input
-                type="text"
-                name="name"
-                className="form-control"
-                required="required"
-              />{" "}
-              <span>Name on card</span>{" "}
-            </div>
-
-            <div className="row">
-              <div className="col-md-6">
-                <div className="inputbox mt-3 mr-2">
-                  {" "}
-                  <input
-                    type="text"
-                    name="name"
-                    className="form-control"
-                    required="required"
-                  />{" "}
-                  <i className="fa fa-credit-card"></i> <span>Card Number</span>
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div className="d-flex flex-row">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>Expiry</span>{" "}
-                  </div>
-
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>CVV</span>{" "}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 mb-4">
-              <h6 className="text-uppercase">Billing Address</h6>
-
-              <div className="row mt-3">
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>Street Address</span>{" "}
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>City</span>{" "}
-                  </div>
-                </div>
-              </div>
-
-              <div className="row mt-2">
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>State/Province</span>{" "}
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>Zip code</span>{" "}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 mb-4 d-flex justify-content-between">
-            <Button onClick={() => setModal2(false)}>Cancel</Button>
-
-            <button className="btn btn-success px-3">Pay $840</button>
-          </div>
-        </div>
-
-        <div className="col-md-4">
-          <div className="card card-blue p-3 text-white mb-3">
-            <span>You have to pay</span>
-            <div className="d-flex flex-row align-items-end mb-3">
-              <h1 className="mb-0 yellow">$549</h1> <span>.99</span>
-            </div>
-
-            <span>
-              Enjoy all the features and perk after you complete the payment
-            </span>
-            <a href="#" className="yellow decoration">
-              Know all the features
-            </a>
-
-            <div className="hightlight">
-              <span>
-                100% Guaranteed support and update for the next 5 years.
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

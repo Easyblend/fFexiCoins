@@ -89,19 +89,15 @@ const Register = () => {
   const createAccount = (e) => {
     e.preventDefault();
     if (agree) {
-      try {
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((credential) => {
-            const user = credential.user;
-            updateProfile(user, { displayName: name });
-            navigate("/admin");
-            toast.success(`Welcome ${name}`);
-            sendDataWithDetails(user.uid, name, user.email);
-          })
-          .catch((error) => toast.error("error code: " + error.code));
-      } catch (error) {
-        toast.error("error code: " + error.code);
-      }
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((credential) => {
+          const user = credential.user;
+          updateProfile(user, { displayName: name });
+          navigate("/admin");
+          toast.success(`Welcome ${name}`);
+          sendDataWithDetails(user.uid, name, user.email);
+        })
+        .catch((error) => toast.error("error code: " + error.code));
     } else {
       toast.warn("agree to terms to proceed");
     }
