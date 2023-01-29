@@ -6,8 +6,10 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  Timestamp,
 } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
+import { toast } from "react-toastify";
 
 const Modal = ({
   setModal,
@@ -28,6 +30,8 @@ const Modal = ({
   const date = new Intl.DateTimeFormat("en-US", {
     month: "long",
     day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
   }).format(new Date());
 
   const [referal, setReferal] = useState("No referal");
@@ -42,17 +46,40 @@ const Modal = ({
     } else {
       setRecieve((dollarRate * purchasingAmount).toFixed(2));
     }
-    console.log(name, currencyType, dollarRate, poundRate, referal, recieve);
-    await updateDoc(doc(database, "Transactions", userId), {
-      name: name,
-      currencyType: currencyType,
-      date: arrayUnion(date),
-      purchasingAmount: arrayUnion(purchasingAmount),
-      dollarRate: dollarRate,
-      poundsRate: poundRate,
-      Amount_recieved: recieve,
-      referal: referal,
-    });
+    try {
+      await updateDoc(
+        doc(database, "Transactions", userId),
+        {
+          name: name,
+          currencyType: currencyType,
+          dates: arrayUnion(date),
+          purchasingAmount: arrayUnion(purchasingAmount),
+          dollarRate: dollarRate,
+          poundsRate: poundRate,
+          Amount_recieved: arrayUnion(recieve),
+          referal: referal,
+        },
+        { merge: true }
+      );
+    } catch (error) {
+      toast.error(error.code);
+    }
+
+    if (referal) {
+      console.log(referal);
+      try {
+        await updateDoc(
+          doc(database, "Users", referal),
+          {
+            referal: arrayUnion(userId),
+          },
+          { merge: true }
+        );
+      } catch (error) {
+        console.log(error);
+        toast.info(error.code);
+      }
+    }
   };
 
   return (
@@ -148,8 +175,8 @@ const Modal = ({
                       name="name"
                       className="form-control"
                       placeholder="optional"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      value={referal}
+                      onChange={(e) => setReferal(e.target.value)}
                     />{" "}
                     <span>Referal Code</span>{" "}
                   </div>
