@@ -145,6 +145,7 @@ const Admin = (props) => {
 
   const [userId, setUserId] = useState();
 
+  const [email, setEmail] = useState();
   const [name, setName] = useState();
 
   const checkUser = () => {
@@ -152,6 +153,7 @@ const Admin = (props) => {
       if (currentUser) {
         setUserId(currentUser.uid);
         setName(currentUser.displayName);
+        setEmail(currentUser.email);
       } else {
         navigate("/auth/login");
       }
@@ -208,6 +210,7 @@ const Admin = (props) => {
                 poundRate={poundRate}
                 userId={userId}
                 name={name}
+                email={email}
               />
             ) : null}
             {modal2 ? (

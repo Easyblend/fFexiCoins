@@ -7,9 +7,15 @@ import {
   updateDoc,
   arrayUnion,
   Timestamp,
+  increment,
+  serverTimestamp,
+  addDoc,
 } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
 import { toast } from "react-toastify";
+
+//importing paystack
+import PaystackPop from "@paystack/inline-js";
 
 const Modal = ({
   setModal,
@@ -19,9 +25,8 @@ const Modal = ({
   poundRate,
   userId,
   name,
+  email,
 }) => {
-  const [currencyType, setCurrencyType] = useState("USD");
-
   // const sendData = async () => {
   //   const response = await getDocs(collection(database, "Users"));
   //   const data = response.forEach((doc) => console.log(doc.data()));
@@ -39,46 +44,78 @@ const Modal = ({
   const [phone, setPhone] = useState();
   const [recieve, setRecieve] = useState();
 
+  const [currencyType, setCurrencyType] = useState();
+
+  console.log(currencyType);
+
   const SendData = async (e) => {
     e.preventDefault();
-    if (currencyType === "GBP") {
-      setRecieve((poundRate * purchasingAmount).toFixed(2));
-    } else {
-      setRecieve((dollarRate * purchasingAmount).toFixed(2));
-    }
-    try {
-      await updateDoc(
-        doc(database, "Transactions", userId),
-        {
-          name: name,
-          currencyType: currencyType,
-          dates: arrayUnion(date),
-          purchasingAmount: arrayUnion(purchasingAmount),
-          dollarRate: dollarRate,
-          poundsRate: poundRate,
-          Amount_recieved: arrayUnion(recieve),
-          referal: referal,
-        },
-        { merge: true }
-      );
-    } catch (error) {
-      toast.error(error.code);
-    }
 
-    if (referal) {
-      console.log(referal);
-      try {
-        await updateDoc(
-          doc(database, "Users", referal),
-          {
-            referal: arrayUnion(userId),
-          },
-          { merge: true }
-        );
-      } catch (error) {
-        console.log(error);
-        toast.info(error.code);
+    // let handler = PaystackPop.setup({
+    //   key: "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1", // Replace with your public key
+    //   email: email,
+    //   amount: purchasingAmount * 100,
+    //   currency: "GHS",
+    //   onClose: function () {
+    //     alert("Aborting payment");
+    //     toast.info("Paayment Aborted");
+    //   },
+    //   fail: toast.error("Transaction expired"),
+    //   callback: function (response) {
+    //     let message = "Payment complete! Reference: " + response.reference;
+    //     alert(message);
+    //   },
+    // });
+
+    try {
+      const paystack = new PaystackPop();
+
+      console.log(recieve);
+
+      if (currencyType === "GBP") {
+        setRecieve((poundRate * purchasingAmount).toFixed(2));
+      } else {
+        setRecieve((dollarRate * purchasingAmount).toFixed(2));
       }
+      await addDoc(
+        collection(database, `Transactions/${userId}/${currencyType}`),
+        {
+          Name: name,
+          Amount: purchasingAmount,
+          Recieved: recieve,
+        }
+      );
+
+      toast.success("Payment Successful");
+
+      // paystack.newTransaction({
+      //   key: "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1",
+      //   email: email,
+      //   amount: purchasingAmount * 100,
+      //   onSuccess: async () => {
+      //     if (currencyType === "GBP") {
+      //       setRecieve((poundRate * purchasingAmount).toFixed(2));
+      //     } else {
+      //       setRecieve((dollarRate * purchasingAmount).toFixed(2));
+      //     }
+      //     await addDoc(
+      //       collection(database, `Transactions/${userId}/${currencyType}`),
+      //       {
+      //         Name: name,
+      //         Amount: purchasingAmount,
+      //         Recieved: recieve,
+      //       }
+      //     );
+
+      //     toast.success("Payment Successful");
+      //   },
+      //   onCancel: () => {
+      //     alert("Aborting payment");
+      //   },
+      // });
+    } catch (error) {
+      console.log(error);
+      toast.error(error.code);
     }
   };
 
@@ -126,8 +163,6 @@ const Modal = ({
                     name="currency"
                     id="currency"
                     className="form-control"
-                    value={currencyType}
-                    onChange={(e) => setCurrencyType(e.target.value)}
                   >
                     <option value="USD">United State Dollars-USD</option>
                     <option value="GBP">Pound Sterling-GBP</option>
