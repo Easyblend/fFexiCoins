@@ -1,24 +1,127 @@
-import react from "react";
+import { useState } from "react";
 import { Button } from "reactstrap";
+import { collection, addDoc } from "firebase/firestore";
+import { database } from "variables/FirebaseConfig";
+import { toast } from "react-toastify";
 
-const Modal2 = ({ setModal2 }) => {
+//importing paystack
+import PaystackPop from "@paystack/inline-js";
+
+const Modal2 = ({
+  setModal2,
+  dollarRate,
+  purchasingAmount,
+  setPurchasingAmount,
+  btcRate,
+  ethRate,
+  userId,
+  name,
+  email,
+}) => {
+  // const sendData = async () => {
+  //   const response = await getDocs(collection(database, "Users"));
+  //   const data = response.forEach((doc) => console.log(doc.data()));
+  // };
+
+  const date = new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  }).format(new Date());
+
+  const [referal, setReferal] = useState("");
+  const [phone, setPhone] = useState("");
+  const [recieve, setRecieve] = useState("");
+
+  const [currencyType, setCurrencyType] = useState("BTC");
+
+  const SendData = async (e) => {
+    e.preventDefault();
+
+    if (currencyType === "BTC") {
+      const price = Number((purchasingAmount / btcRate) * dollarRate).toFixed(
+        5
+      );
+      setRecieve(price);
+    } else {
+      const price = Number((purchasingAmount / ethRate) * dollarRate).toFixed(
+        5
+      );
+      setRecieve(price);
+    }
+
+    if (recieve) {
+      try {
+        const paystack = new PaystackPop();
+
+        paystack.newTransaction({
+          key: "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1",
+          email: email,
+          amount: purchasingAmount * 100,
+
+          onSuccess: async () => {
+            try {
+              await toast.promise(
+                addDoc(
+                  collection(
+                    database,
+                    `Transactions/${userId}/${currencyType}`
+                  ),
+                  {
+                    Name: name,
+                    Amount: purchasingAmount + " GHC",
+                    Recieved: recieve + " " + currencyType,
+                    date: date,
+                    phone: phone,
+                  }
+                ),
+                {
+                  pending: "Verifying Payment",
+                  success: "Payment Successful",
+                }
+              );
+            } catch (error) {
+              toast.error("Something's not right. Contact Us for help");
+            }
+          },
+          onCancel: () => {
+            alert("Aborting payment");
+          },
+          onClose: () => {
+            toast.info("Payment Aborted");
+          },
+        });
+      } catch (error) {
+        toast.error(error.code);
+      }
+    } else {
+      toast.warning("try again, Something went wrong!");
+    }
+  };
+
   return (
-    <div className="container mt-5 px-5">
+    <div className="container-fluid mt-2">
       <Button
-        className="btn-danger text-center mx-auto d-flex"
-        onClick={() => setModal2(false)}
+        className="btn-danger text-center mb-4 mx-auto d-flex"
+        onClick={() => {
+          setModal2(false);
+        }}
       >
         Abort and Close
       </Button>
       <div className="mb-4">
         <h2>Confirm Crypto purchase</h2>
         <span>
-          please make the payment, after that you can enjoy all the features and
-          benefits.
+          Payments are secured. Purchasing Crypto will reflect in your account
+          after the paymenr has been confirmed.
+          <br />
+          Having issues with your payment,{" "}
+          <a href="mailto:support@flexicoins.com">Contact US</a>
         </span>
       </div>
 
-      <div className="row">
+      <form className="row" onSubmit={SendData}>
         <div className="col-md-8">
           <div className="card p-3">
             <h6 className="text-uppercase">Payment details</h6>
@@ -28,54 +131,59 @@ const Modal2 = ({ setModal2 }) => {
                 type="text"
                 name="name"
                 className="form-control"
-                required="required"
+                disabled
+                value={name}
               />{" "}
-              <span>Name on card</span>{" "}
+              <span>
+                Full Name <span className="text-danger">*</span>
+              </span>{" "}
             </div>
 
             <div className="row">
               <div className="col-md-6">
                 <div className="inputbox mt-3 mr-2">
                   {" "}
-                  <input
-                    type="text"
-                    name="name"
+                  <select
+                    name="currency"
+                    id="currency"
                     className="form-control"
-                    required="required"
-                  />{" "}
-                  <i className="fa fa-credit-card"></i> <span>Card Number</span>
+                    onChange={(e) => setCurrencyType(e.target.value)}
+                  >
+                    <option value="BTC">Bitcoin BTC</option>
+                    <option value="ETH">Ethereum ETH</option>
+                  </select>
+                  <div>
+                    <label htmlFor="currency">
+                      <i className="fa-solid fa-wallet"></i>{" "}
+                      <span>
+                        Crypto type <span className="text-danger">*</span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
 
               <div className="col-md-6">
-                <div className="d-flex flex-row">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>Expiry</span>{" "}
-                  </div>
-
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>CVV</span>{" "}
-                  </div>
+                <div className="inputbox mt-3 mr-2">
+                  {" "}
+                  <input
+                    type="tel"
+                    name="name"
+                    className="form-control"
+                    required="required"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />{" "}
+                  <span>
+                    <i className="fa-solid fa-phone"></i> Phone Number{" "}
+                    <span className="text-danger">*</span>
+                  </span>{" "}
                 </div>
               </div>
             </div>
 
             <div className="mt-4 mb-4">
-              <h6 className="text-uppercase">Billing Address</h6>
+              <h6 className="text-uppercase">Purchasing Amount</h6>
 
               <div className="row mt-3">
                 <div className="col-md-6">
@@ -85,9 +193,11 @@ const Modal2 = ({ setModal2 }) => {
                       type="text"
                       name="name"
                       className="form-control"
-                      required="required"
+                      placeholder="optional"
+                      value={referal}
+                      onChange={(e) => setReferal(e.target.value)}
                     />{" "}
-                    <span>Street Address</span>{" "}
+                    <span>Referal Code</span>{" "}
                   </div>
                 </div>
 
@@ -95,12 +205,17 @@ const Modal2 = ({ setModal2 }) => {
                   <div className="inputbox mt-3 mr-2">
                     {" "}
                     <input
-                      type="text"
+                      type="number"
                       name="name"
                       className="form-control"
                       required="required"
+                      value={purchasingAmount}
+                      onChange={(e) => setPurchasingAmount(e.target.value)}
                     />{" "}
-                    <span>City</span>{" "}
+                    <span>
+                      Purchasing amount in GHC{" "}
+                      <span className="text-danger">*</span>
+                    </span>{" "}
                   </div>
                 </div>
               </div>
@@ -108,27 +223,43 @@ const Modal2 = ({ setModal2 }) => {
               <div className="row mt-2">
                 <div className="col-md-6">
                   <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>State/Province</span>{" "}
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="inputbox mt-3 mr-2">
-                    {" "}
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      required="required"
-                    />{" "}
-                    <span>Zip code</span>{" "}
+                    <span>What you'll get in {currencyType}</span> <span></span>
+                    <div className="d-flex ">
+                      {currencyType === "BTC" ? (
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          disabled
+                          value={
+                            " BTC " +
+                            Number(
+                              (purchasingAmount / btcRate) * dollarRate
+                            ).toFixed(5)
+                          }
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          disabled
+                          value={
+                            " ETH " +
+                            Number(
+                              (purchasingAmount / ethRate) * dollarRate
+                            ).toFixed(5)
+                          }
+                          on
+                        />
+                      )}
+                      <Button
+                        className="btn-secondary ml-3"
+                        onClick={() => setPurchasingAmount(0)}
+                      >
+                        Clear
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -137,33 +268,30 @@ const Modal2 = ({ setModal2 }) => {
 
           <div className="mt-4 mb-4 d-flex justify-content-between">
             <Button onClick={() => setModal2(false)}>Cancel</Button>
-
-            <button className="btn btn-success px-3">Pay $840</button>
+            <button className="btn btn-success px-3" type="submit">
+              Pay &#8373;{purchasingAmount}
+            </button>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card card-blue p-3 text-white mb-3">
-            <span>You have to pay</span>
+          <div className="card bg-default p-3 text-white mb-3">
+            <h2 className=" text-info">Conversion Rates</h2>
             <div className="d-flex flex-row align-items-end mb-3">
-              <h1 className="mb-0 yellow">$549</h1> <span>.99</span>
+              <h4 className="mb-0 text-secondary">
+                1 BTC is equal to &#8373;{" "}
+                {(btcRate / dollarRate).toLocaleString("en-US")}
+              </h4>
             </div>
-
-            <span>
-              Enjoy all the features and perk after you complete the payment
-            </span>
-            <a href="#" className="yellow decoration">
-              Know all the features
-            </a>
-
-            <div className="hightlight">
-              <span>
-                100% Guaranteed support and update for the next 5 years.
-              </span>
+            <div className="d-flex flex-row align-items-end mb-3">
+              <h4 className="mb-0 text-secondary">
+                1 ETH is equal to &#8373;{" "}
+                {(ethRate / dollarRate).toLocaleString("en-US")}{" "}
+              </h4>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

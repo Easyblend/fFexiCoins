@@ -65,10 +65,7 @@ const Sidebar = (props) => {
 
   useEffect(checkUser, []);
   const [collapseOpen, setCollapseOpen] = useState();
-  // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
-    return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
-  };
+
   // toggles collapse between opened and closed (true/false)
   const toggleCollapse = () => {
     setCollapseOpen((data) => !data);
@@ -240,6 +237,7 @@ const Sidebar = (props) => {
               onClick={() => {
                 props.setModal(true);
                 props.setModal2(false);
+                closeCollapse();
               }}
               type="button"
             >
@@ -253,6 +251,7 @@ const Sidebar = (props) => {
               onClick={() => {
                 props.setModal2(true);
                 props.setModal(false);
+                closeCollapse();
               }}
               type="button"
             >

@@ -1,16 +1,6 @@
-import react, { useState } from "react";
+import { useState } from "react";
 import { Button } from "reactstrap";
-import {
-  collection,
-  setDoc,
-  doc,
-  updateDoc,
-  arrayUnion,
-  Timestamp,
-  increment,
-  serverTimestamp,
-  addDoc,
-} from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
 import { toast } from "react-toastify";
 
@@ -40,89 +30,74 @@ const Modal = ({
   }).format(new Date());
 
   const [referal, setReferal] = useState("No referal");
-  const [amount, setAmount] = useState();
-  const [phone, setPhone] = useState();
-  const [recieve, setRecieve] = useState();
+  const [phone, setPhone] = useState("");
+  const [recieve, setRecieve] = useState("");
 
-  const [currencyType, setCurrencyType] = useState();
-
-  console.log(currencyType);
+  const [currencyType, setCurrencyType] = useState("USD");
 
   const SendData = async (e) => {
     e.preventDefault();
 
-    // let handler = PaystackPop.setup({
-    //   key: "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1", // Replace with your public key
-    //   email: email,
-    //   amount: purchasingAmount * 100,
-    //   currency: "GHS",
-    //   onClose: function () {
-    //     alert("Aborting payment");
-    //     toast.info("Paayment Aborted");
-    //   },
-    //   fail: toast.error("Transaction expired"),
-    //   callback: function (response) {
-    //     let message = "Payment complete! Reference: " + response.reference;
-    //     alert(message);
-    //   },
-    // });
+    if (currencyType === "USD") {
+      const price = Number(dollarRate * purchasingAmount).toFixed(2);
+      setRecieve(price);
+    } else {
+      const price = Number(poundRate * purchasingAmount).toFixed(2);
+      setRecieve(price);
+    }
 
-    try {
-      const paystack = new PaystackPop();
+    if (recieve) {
+      try {
+        const paystack = new PaystackPop();
 
-      console.log(recieve);
-
-      if (currencyType === "GBP") {
-        setRecieve((poundRate * purchasingAmount).toFixed(2));
-      } else {
-        setRecieve((dollarRate * purchasingAmount).toFixed(2));
+        paystack.newTransaction({
+          key: "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1",
+          email: email,
+          amount: purchasingAmount * 100,
+          onSuccess: async () => {
+            try {
+              await toast.promise(
+                addDoc(
+                  collection(
+                    database,
+                    `Transactions/${userId}/${currencyType}`
+                  ),
+                  {
+                    Name: name,
+                    Amount: purchasingAmount + " GHS",
+                    Recieved: recieve + " " + currencyType,
+                    date: date,
+                    phone: phone,
+                  }
+                ),
+                {
+                  pending: "Verifying Payment",
+                  success: "Payment Successful",
+                }
+              );
+            } catch (error) {
+              toast.error("Payment Failed");
+            }
+          },
+          onCancel: () => {
+            alert("Aborting payment");
+          },
+          onClose: () => {
+            toast.info("Payment Aborted");
+          },
+        });
+      } catch (error) {
+        toast.error(error.code);
       }
-      await addDoc(
-        collection(database, `Transactions/${userId}/${currencyType}`),
-        {
-          Name: name,
-          Amount: purchasingAmount,
-          Recieved: recieve,
-        }
-      );
-
-      toast.success("Payment Successful");
-
-      // paystack.newTransaction({
-      //   key: "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1",
-      //   email: email,
-      //   amount: purchasingAmount * 100,
-      //   onSuccess: async () => {
-      //     if (currencyType === "GBP") {
-      //       setRecieve((poundRate * purchasingAmount).toFixed(2));
-      //     } else {
-      //       setRecieve((dollarRate * purchasingAmount).toFixed(2));
-      //     }
-      //     await addDoc(
-      //       collection(database, `Transactions/${userId}/${currencyType}`),
-      //       {
-      //         Name: name,
-      //         Amount: purchasingAmount,
-      //         Recieved: recieve,
-      //       }
-      //     );
-
-      //     toast.success("Payment Successful");
-      //   },
-      //   onCancel: () => {
-      //     alert("Aborting payment");
-      //   },
-      // });
-    } catch (error) {
-      console.log(error);
-      toast.error(error.code);
+    } else {
+      toast.warning("Something went wrong try again");
     }
   };
 
   return (
-    <div className="container mt-5 px-5">
+    <div className="container-fluid mt-2">
       <Button
-        className="btn-danger text-center mx-auto d-flex"
+        className="btn-danger text-center mb-4 mx-auto d-flex"
         onClick={() => {
           setModal(false);
         }}
@@ -148,7 +123,7 @@ const Modal = ({
                 name="name"
                 className="form-control"
                 disabled
-                defaultValue={name}
+                value={name}
               />{" "}
               <span>
                 Full Name <span className="text-danger">*</span>
@@ -163,6 +138,7 @@ const Modal = ({
                     name="currency"
                     id="currency"
                     className="form-control"
+                    onChange={(e) => setCurrencyType(e.target.value)}
                   >
                     <option value="USD">United State Dollars-USD</option>
                     <option value="GBP">Pound Sterling-GBP</option>
@@ -186,7 +162,6 @@ const Modal = ({
                     name="name"
                     className="form-control"
                     required="required"
-                    defaultChecked="+233"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                   />{" "}
@@ -257,7 +232,6 @@ const Modal = ({
                           type="text"
                           name="name"
                           className="form-control"
-                          defaultValue="10"
                           disabled
                           value={
                             " GBP " +

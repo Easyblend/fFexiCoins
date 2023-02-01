@@ -99,7 +99,7 @@ const Admin = (props) => {
       const data = await response.json();
       setDollarRate(data.new_amount);
     } catch (error) {
-      throw error;
+      toast.info("Something's not right, refresh the page");
     }
   };
 
@@ -168,14 +168,14 @@ const Admin = (props) => {
   const [datas, setDatas] = useState([]);
 
   const getTransactions = async () => {
-    try {
-      const response = await getDocs(collection(database, "Transactions"));
-      if (response) {
-        console.log(response.size);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const response = await getDocs(collection(database, "Transactions"));
+    //   if (response) {
+    //     console.log(response.size);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   useEffect(() => getTransactions);
@@ -195,10 +195,6 @@ const Admin = (props) => {
       />
 
       <div className="main-content" ref={mainContent}>
-        <AdminNavbar
-          {...props}
-          brandText={getBrandText(props.location.pathname)}
-        />
         {modal || modal2 ? (
           <div className="modal-header">
             {modal ? (
@@ -221,15 +217,24 @@ const Admin = (props) => {
                 dollarRate={dollarRate}
                 purchasingAmount={purchasingAmount}
                 setPurchasingAmount={setPurchasingAmount}
+                userId={userId}
+                name={name}
+                email={email}
               />
             ) : null}
           </div>
         ) : (
-          <Switch>
-            {getRoutes(routes)}
+          <>
+            <AdminNavbar
+              {...props}
+              brandText={getBrandText(props.location.pathname)}
+            />
+            <Switch>
+              {getRoutes(routes)}
 
-            <Redirect from="*" to="/admin/index" />
-          </Switch>
+              <Redirect from="*" to="/admin/index" />
+            </Switch>
+          </>
         )}
 
         <Container fluid>
