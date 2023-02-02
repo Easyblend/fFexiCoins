@@ -44,10 +44,7 @@ root.render(
       <CompatRouter>
         <Switch>
           <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-          <Route
-            path="/deposit"
-            render={(props) => <DepositPage {...props} />}
-          />
+
           <Route
             path="/withdraw"
             render={(props) => <WidthrawPage {...props} />}

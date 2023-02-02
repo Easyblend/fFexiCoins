@@ -38,7 +38,9 @@ const Header = () => {
                         >
                           USD
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">0 $</span>
+                        <span className="h2 font-weight-bold mb-0">
+                          12.30 $
+                        </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -66,7 +68,9 @@ const Header = () => {
                         >
                           Pound sterling
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">0 £</span>
+                        <span className="h2 font-weight-bold mb-0">
+                          650.20 £
+                        </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape  bg-default text-white rounded-circle shadow">
