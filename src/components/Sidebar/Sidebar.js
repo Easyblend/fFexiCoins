@@ -262,7 +262,7 @@ const Sidebar = (props) => {
             </NavItem>
 
             <NavItem>
-              <NavLink>
+              <NavLink tag={Link} to="/withdraw">
                 <Button className="w-100 btn-success">
                   <i className="fa-solid fa-hand-holding-dollar"></i>
                   Withdraw
