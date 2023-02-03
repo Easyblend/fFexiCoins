@@ -1,20 +1,30 @@
 import Header from "components/Headers/Header";
-import { Container, Col, Row, CardTitle, CardBody, Card } from "reactstrap";
+import {
+  Container,
+  Col,
+  Row,
+  CardTitle,
+  CardBody,
+  Card,
+  Form,
+  FormGroup,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
+  Label,
+} from "reactstrap";
 import React from "react";
 
 const WidthrawPage = () => {
   return (
-    <div className="p-5">
+    <div className="py-5">
       <div>
-        <h1 className="text-center display-3 fw-bold">
-          Withdrawing Page In progress
-        </h1>
-
-        <div className="header pb-8 pt-1 pt-md-3">
-          <p className="text-center">
-            All withdrawals will take between 24 - 48 hours to be processed.
-            please be patient while we process your requests
-          </p>
+        <h1 className="text-center display-3 fw-bold">Withdrawing Funds</h1>
+        <div className="header pb-8 pt-3 pt-md-5">
+          <h4 className="text-center text-dark mb-3">
+            Pick an account to withdraw from
+          </h4>
           <Container fluid>
             <div className="header-body">
               {/* Card stats */}
@@ -141,6 +151,51 @@ const WidthrawPage = () => {
                 </Col>
               </Row>
             </div>
+          </Container>
+          <p className="text-center">
+            All withdrawals will take between 24 - 48 hours to be processed.
+            please be patient while we process your requests
+          </p>
+          <Container className="mt-7">
+            <h4 className="text-center">USD Withdrawal</h4>
+            <Row>
+              <Col sm="7">
+                <Form>
+                  <FormGroup>
+                    <Label htmlFor="phone">Phone number</Label>
+                    <InputGroup className="input-group-alternative">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i class="fa-solid fa-phone"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input placeholder="+233" id="phone" type="text" />
+                    </InputGroup>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label htmlFor="phone">Amount in &#8373;</Label>
+                    <InputGroup className="input-group-alternative">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i class="fa-solid fa-money-check-dollar"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input placeholder="GHS 0.00" type="number" />
+                    </InputGroup>
+                  </FormGroup>
+                </Form>
+              </Col>
+              <Col className="text-right my-auto shadow-lg">
+                <h1 className="display-1">$ 12,893.01</h1>
+                <h5>USD Balance</h5>
+              </Col>
+            </Row>
+            <p className="text-center">
+              Please take note of the 3% widthrawal charges with an extra 1.5%
+              e-levy tax deductions. <br />
+              If you have questions do ask us{" "}
+              <a href="mailto:support@flexicoins.com">Here</a>
+            </p>
           </Container>
         </div>
       </div>
