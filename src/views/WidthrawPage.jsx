@@ -13,30 +13,104 @@ import {
   InputGroupText,
   Input,
   Label,
+  Table,
+  Button,
+  DropdownToggle,
+  Media,
+  UncontrolledDropdown,
+  DropdownItem,
+  DropdownMenu,
 } from "reactstrap";
-import React from "react";
+import React, { useState } from "react";
+import AdminNavbar from "components/Navbars/AdminNavbar";
+import { Link } from "react-router-dom";
 
 const WidthrawPage = () => {
+  const [usdWithdrawal, setUsdWithdrawal] = useState(false);
+  const [gbpWithdrawal, setGbpWithdrawal] = useState(false);
+  const [btcWithdrawal, setBtcWithdrawal] = useState(false);
+  const [ethWithdrawal, setEthWithdrawal] = useState(false);
+
+  const [selectedUI, setSelectedUI] = useState("shadow-lg ");
+
+  const [photoUrl, setPhotoUrl] = useState(
+    "https://www.grovenetworks.com/images/easyblog_shared/July_2018/7-4-18/b2ap3_large_totw_network_profile_400.jpg"
+  );
+
   return (
-    <div className="py-5">
+    <div className="py-3">
+      <UncontrolledDropdown
+        nav
+        className="pb-5 mx-5 justify-content-end d-flex"
+      >
+        <DropdownToggle className="pr-0" nav>
+          <Media className="align-items-center">
+            <span className="avatar avatar-sm rounded-circle">
+              <img alt="..." src={photoUrl} />
+            </span>
+            <Media className="ml-2 ">
+              <span className="mb-0 text-sm font-weight-bold">Mckenzie</span>
+            </Media>
+          </Media>
+        </DropdownToggle>
+        <DropdownMenu className="dropdown-menu-arrow" right>
+          <DropdownItem className="noti-title" header tag="div">
+            <h6 className="text-overflow m-0">Menu</h6>
+          </DropdownItem>
+          <DropdownItem to="/admin" tag={Link}>
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Return to Home</span>
+          </DropdownItem>
+          <DropdownItem
+          // onClick={async () => {
+          //   try {
+          //     alert("Loging out");
+          //     await signOut(auth);
+          //     naviagte("/login");
+          //   } catch (error) {
+          //     toast.error("this error occured: " + error.code);
+          //   }
+          // }}
+          >
+            <i className="ni ni-user-run" />
+            <span>Logout</span>
+          </DropdownItem>
+        </DropdownMenu>
+      </UncontrolledDropdown>
       <div>
-        <h1 className="text-center display-3 fw-bold">Withdrawing Funds</h1>
+        <h1 className="text-center display-3 fw-bold">Withdraw Funds</h1>
         <div className="header pb-8 pt-3 pt-md-5">
           <h4 className="text-center text-dark mb-3">
             Pick an account to withdraw from
           </h4>
-          <Container fluid>
+          <Container
+            fluid
+            className="px-4 px-sm-6"
+            onClick={() => {
+              document.getElementById("wid  thdraw").scrollIntoView();
+            }}
+          >
             <div className="header-body">
               {/* Card stats */}
               <Row>
-                <Col lg="6" xl="3">
+                <Col
+                  href="#withdraw"
+                  lg="6"
+                  xl="3"
+                  onClick={() => {
+                    setUsdWithdrawal(true);
+                    setBtcWithdrawal(false);
+                    setEthWithdrawal(false);
+                    setGbpWithdrawal(false);
+                  }}
+                >
                   <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
+                    <CardBody className={usdWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
                           <CardTitle
                             tag="h5"
-                            className="text-uppercase text-muted mb-0"
+                            className={`text-uppercase  mb-0`}
                           >
                             USD
                           </CardTitle>
@@ -59,9 +133,18 @@ const WidthrawPage = () => {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col lg="6" xl="3">
+                <Col
+                  lg="6"
+                  xl="3"
+                  onClick={() => {
+                    setUsdWithdrawal(false);
+                    setBtcWithdrawal(false);
+                    setEthWithdrawal(false);
+                    setGbpWithdrawal(true);
+                  }}
+                >
                   <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
+                    <CardBody className={gbpWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
                           <CardTitle
@@ -89,9 +172,18 @@ const WidthrawPage = () => {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col lg="6" xl="3">
+                <Col
+                  lg="6"
+                  xl="3"
+                  onClick={() => {
+                    setUsdWithdrawal(false);
+                    setBtcWithdrawal(true);
+                    setEthWithdrawal(false);
+                    setGbpWithdrawal(false);
+                  }}
+                >
                   <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
+                    <CardBody className={btcWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
                           <CardTitle
@@ -119,9 +211,18 @@ const WidthrawPage = () => {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col lg="6" xl="3">
+                <Col
+                  lg="6"
+                  xl="3"
+                  onClick={() => {
+                    setUsdWithdrawal(false);
+                    setBtcWithdrawal(false);
+                    setEthWithdrawal(true);
+                    setGbpWithdrawal(false);
+                  }}
+                >
                   <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
+                    <CardBody className={ethWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
                           <CardTitle
@@ -156,46 +257,26 @@ const WidthrawPage = () => {
             All withdrawals will take between 24 - 48 hours to be processed.
             please be patient while we process your requests
           </p>
-          <Container className="mt-7">
-            <h4 className="text-center">USD Withdrawal</h4>
-            <Row>
-              <Col sm="7">
-                <Form>
-                  <FormGroup>
-                    <Label htmlFor="phone">Phone number</Label>
-                    <InputGroup className="input-group-alternative">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i class="fa-solid fa-phone"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input placeholder="+233" id="phone" type="text" />
-                    </InputGroup>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label htmlFor="phone">Amount in &#8373;</Label>
-                    <InputGroup className="input-group-alternative">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i class="fa-solid fa-money-check-dollar"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input placeholder="GHS 0.00" type="number" />
-                    </InputGroup>
-                  </FormGroup>
-                </Form>
-              </Col>
-              <Col className="text-right my-auto shadow-lg">
-                <h1 className="display-1">$ 12,893.01</h1>
-                <h5>USD Balance</h5>
-              </Col>
-            </Row>
-            <p className="text-center">
-              Please take note of the 3% widthrawal charges with an extra 1.5%
-              e-levy tax deductions. <br />
-              If you have questions do ask us{" "}
-              <a href="mailto:support@flexicoins.com">Here</a>
-            </p>
+          <WithdrawForm />
+          <Container className="mt-5">
+            <h2>Recent Transactions</h2>
+            <Table>
+              <tr>
+                <th>Transactions ID</th>
+                <th>Type</th>
+                <th>Amount &#8373;</th>
+                <th>Date</th>
+              </tr>
+
+              <tbody>
+                <tr>
+                  <td>UID23</td>
+                  <td>USD</td>
+                  <td>340</td>
+                  <td>12-23-2021</td>
+                </tr>
+              </tbody>
+            </Table>
           </Container>
         </div>
       </div>
@@ -204,3 +285,54 @@ const WidthrawPage = () => {
 };
 
 export default WidthrawPage;
+
+const WithdrawForm = () => {
+  return (
+    <Container className="mt-7 flex-wrap-reverse" id="widthdraw">
+      <h4 className="text-center">USD Withdrawal</h4>
+      <Row className="flex-wrap-reverse">
+        <Col sm="7">
+          <Form>
+            <FormGroup>
+              <Label htmlFor="phone">Phone number</Label>
+              <InputGroup className="input-group-alternative">
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <i class="fa-solid fa-phone"></i>
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input placeholder="+233" id="phone" type="text" />
+              </InputGroup>
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="phone">Amount in &#8373;</Label>
+              <InputGroup className="input-group-alternative">
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <i class="fa-solid fa-money-check-dollar"></i>
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input placeholder="GHS 0.00" type="number" />
+              </InputGroup>
+            </FormGroup>
+          </Form>
+        </Col>
+        <Col className="text-right my-4 shadow-lg px-3">
+          <h1 className="display-1">$ 12,893.01</h1>
+          <h4 className="text-left">Balance</h4>
+        </Col>
+      </Row>
+      <p className="text-center">
+        Please take note of the 3% widthrawal charges with an extra 1.5% e-levy
+        tax deductions. <br />
+        If you have questions do ask us{" "}
+        <a
+          href="mailto:support@flexicoins.com"
+          className="fw-bold bg-dark p-1 rounded px-2 text-light mx-2 fw-bold"
+        >
+          Here
+        </a>
+      </p>
+    </Container>
+  );
+};
