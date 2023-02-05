@@ -70,8 +70,9 @@ const Modal2 = ({
                   ),
                   {
                     Name: name,
-                    Amount: purchasingAmount + " GHC",
-                    Recieved: recieve + " " + currencyType,
+                    Amount: purchasingAmount,
+                    Recieved: recieve,
+                    what_Purchased: currencyType,
                     date: date,
                     phone: phone,
                   }

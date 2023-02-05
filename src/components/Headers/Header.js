@@ -17,9 +17,21 @@
 */
 
 // reactstrap components
+import { useEffect, useState } from "react";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-const Header = () => {
+const Header = ({ usdPurchase }) => {
+  const [total, setTotal] = useState();
+  let totals = "";
+  useEffect(() => {
+    usdPurchase?.map((price) => {
+      totals = Number(price.Recieved) + Number(totals);
+      setTotal(totals);
+    });
+  });
+
+  console.log(total);
+
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -98,7 +110,9 @@ const Header = () => {
                         >
                           BTC
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">0.0046</span>
+                        <span className="h2 font-weight-bold mb-0">
+                          {total}
+                        </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-warning  text-white rounded-circle shadow">

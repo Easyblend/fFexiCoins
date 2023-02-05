@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -66,19 +66,33 @@ const Index = () => {
 
   //Databse setUp
 
-  // const getData = async () => {
-  //   const querySnapshot = await getDocs(collection(database, "Investors"));
-  //   querySnapshot.forEach((doc) => {
-  //     // doc.data() is never undefined for query doc snapshots
-  //     console.log(doc.id, " => ", doc.data());
-  //   });
-  // };
+  const [usdPurchase, setUsdPurchase] = useState();
+  const getData = async () => {
+    try {
+      const usdArray = [];
+      const querySnapshot = await getDocs(
+        collection(
+          database,
+          "Transactions",
+          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
+          "BTC"
+        )
+      );
 
-  // getData();
+      querySnapshot.forEach((doc) => usdArray.push(doc.data()));
+      setUsdPurchase(usdArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
-      <Header />
+      <Header usdPurchase={usdPurchase} />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>

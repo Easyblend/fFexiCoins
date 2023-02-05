@@ -64,8 +64,9 @@ const Modal = ({
                   ),
                   {
                     Name: name,
-                    Amount: purchasingAmount + " GHS",
-                    Recieved: recieve + " " + currencyType,
+                    Amount: purchasingAmount,
+                    Recieved: recieve,
+                    what_Purchased: currencyType,
                     date: date,
                     phone: phone,
                   }
