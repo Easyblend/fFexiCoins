@@ -18,19 +18,41 @@
 
 // reactstrap components
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-const Header = ({ usdPurchase }) => {
-  const [total, setTotal] = useState();
-  let totals = "";
-  useEffect(() => {
-    usdPurchase?.map((price) => {
-      totals = Number(price.Recieved) + Number(totals);
-      setTotal(totals);
-    });
-  });
+const Header = ({ usdPurchase, gpbPurchase }) => {
+  const [usdtotal, setUsdTotal] = useState();
+  const [gbptotal, setGbpTotal] = useState();
 
-  console.log(total);
+  const options = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "X-RapidAPI-Key": "3a715ecf6dmsh42d397b5484cb27p1a146ejsn3a01e7e8200b",
+      "X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com",
+    },
+    body: '{"personalizations":[{"to":[{"email":"kenzieemma072@gmail.com"}],"subject":"Hello, World!"}],"from":{"email":"meghanroche20@gmail.com"},"content":[{"type":"text/plain","value":"Hello, World!"}]}',
+  };
+
+  fetch("https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send", options)
+    .then((response) => response.json())
+    .then((response) => console.log(response))
+    .catch((err) => console.error(err));
+
+  useEffect(() => {
+    let usdTotals = "";
+    usdPurchase?.map((price) => {
+      usdTotals = (Number(price.Recieved) + Number(usdTotals)).toFixed(2);
+    });
+    setUsdTotal(usdTotals);
+
+    let gbpTotals = "";
+    gpbPurchase?.map((price) => {
+      gbpTotals = (Number(price.Recieved) + Number(gbpTotals)).toFixed(2);
+    });
+    setGbpTotal(gbpTotals);
+  });
 
   return (
     <>
@@ -51,7 +73,7 @@ const Header = ({ usdPurchase }) => {
                           USD
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          12.30 $
+                          {usdtotal} $
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -81,7 +103,7 @@ const Header = ({ usdPurchase }) => {
                           Pound sterling
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          650.20 £
+                          {gbptotal} £
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -110,9 +132,7 @@ const Header = ({ usdPurchase }) => {
                         >
                           BTC
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {total}
-                        </span>
+                        <span className="h2 font-weight-bold mb-0">0.0003</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-warning  text-white rounded-circle shadow">

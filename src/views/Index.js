@@ -67,7 +67,11 @@ const Index = () => {
   //Databse setUp
 
   const [usdPurchase, setUsdPurchase] = useState();
-  const getData = async () => {
+  const [gbpPurchase, setGbpPurchase] = useState();
+  const [btcPurchase, setBtcPurchase] = useState();
+  const [ethPurchase, setEthPurchase] = useState();
+
+  const getUSDData = async () => {
     try {
       const usdArray = [];
       const querySnapshot = await getDocs(
@@ -75,7 +79,7 @@ const Index = () => {
           database,
           "Transactions",
           "1VNX7bfiadXFXU7OcVE47l3mMDI2",
-          "BTC"
+          "USD"
         )
       );
 
@@ -86,13 +90,39 @@ const Index = () => {
     }
   };
 
+  const getGBPdata = async () => {
+    try {
+      const gbpArray = [];
+      const querySnapshot = await getDocs(
+        collection(
+          database,
+          "Transactions",
+          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
+          "GBP"
+        )
+      );
+
+      querySnapshot.forEach((doc) => gbpArray.push(doc.data()));
+
+      setGbpPurchase(gbpArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(gbpPurchase);
+
   useEffect(() => {
-    getData();
+    getUSDData();
+  }, []);
+
+  useEffect(() => {
+    getGBPdata();
   }, []);
 
   return (
     <>
-      <Header usdPurchase={usdPurchase} />
+      <Header usdPurchase={usdPurchase} gpbPurchase={gbpPurchase} />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
