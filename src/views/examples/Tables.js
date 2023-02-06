@@ -33,15 +33,98 @@ import {
   Table,
   Container,
   Row,
-  UncontrolledTooltip
+  UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { database } from "variables/FirebaseConfig";
+
 const Tables = () => {
+  const [usdPurchase, setUsdPurchase] = useState();
+  const [gbpPurchase, setGbpPurchase] = useState();
+  const [btcPurchase, setBtcPurchase] = useState();
+  const [ethPurchase, setEthPurchase] = useState();
+
+  const getUSDData = async () => {
+    try {
+      const usdArray = [];
+      const querySnapshot = await getDocs(
+        collection(
+          database,
+          "Transactions",
+          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
+          "USD"
+        )
+      );
+
+      querySnapshot.forEach((doc) => usdArray.push(doc.data()));
+      setUsdPurchase(usdArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getGBPdata = async () => {
+    try {
+      const gbpArray = [];
+      const querySnapshot = await getDocs(
+        collection(
+          database,
+          "Transactions",
+          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
+          "GBP"
+        )
+      );
+
+      querySnapshot.forEach((doc) => gbpArray.push(doc.data()));
+
+      setGbpPurchase(gbpArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getBTCdata = async () => {
+    try {
+      const btcArray = [];
+      const querySnapshot = await getDocs(
+        collection(
+          database,
+          "Transactions",
+          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
+          "BTC"
+        )
+      );
+
+      querySnapshot.forEach((doc) => btcArray.push(doc.data()));
+      setBtcPurchase(btcArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUSDData();
+  }, []);
+
+  useEffect(() => {
+    getGBPdata();
+  }, []);
+
+  useEffect(() => {
+    getBTCdata();
+  }, []);
+
   return (
     <>
-      <Header />
+      <Header
+        usdPurchase={usdPurchase}
+        gpbPurchase={gbpPurchase}
+        btcPurchase={btcPurchase}
+      />
       {/* Page content */}
       <Container className="mt--7" fluid>
         {/* Table */}

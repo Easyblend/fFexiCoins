@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 //importing paystack
 import PaystackPop from "@paystack/inline-js";
+import { useNavigate } from "react-router-dom-v5-compat";
 
 const Modal2 = ({
   setModal2,
@@ -22,6 +23,8 @@ const Modal2 = ({
   //   const response = await getDocs(collection(database, "Users"));
   //   const data = response.forEach((doc) => console.log(doc.data()));
   // };
+
+  const navigate = useNavigate();
 
   const date = new Intl.DateTimeFormat("en-US", {
     month: "long",
@@ -77,11 +80,13 @@ const Modal2 = ({
                     phone: phone,
                   }
                 ),
+
                 {
                   pending: "Verifying Payment",
                   success: "Payment Successful",
                 }
               );
+              navigate("/");
             } catch (error) {
               toast.error("Something's not right. Contact Us for help");
             }

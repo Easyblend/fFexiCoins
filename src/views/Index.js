@@ -110,7 +110,24 @@ const Index = () => {
     }
   };
 
-  console.log(gbpPurchase);
+  const getBTCdata = async () => {
+    try {
+      const btcArray = [];
+      const querySnapshot = await getDocs(
+        collection(
+          database,
+          "Transactions",
+          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
+          "BTC"
+        )
+      );
+
+      querySnapshot.forEach((doc) => btcArray.push(doc.data()));
+      setBtcPurchase(btcArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     getUSDData();
@@ -120,9 +137,17 @@ const Index = () => {
     getGBPdata();
   }, []);
 
+  useEffect(() => {
+    getBTCdata();
+  }, []);
+
   return (
     <>
-      <Header usdPurchase={usdPurchase} gpbPurchase={gbpPurchase} />
+      <Header
+        usdPurchase={usdPurchase}
+        gpbPurchase={gbpPurchase}
+        btcPurchase={btcPurchase}
+      />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>

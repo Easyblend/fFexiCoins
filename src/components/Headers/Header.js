@@ -21,24 +21,11 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-const Header = ({ usdPurchase, gpbPurchase }) => {
+const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
   const [usdtotal, setUsdTotal] = useState();
   const [gbptotal, setGbpTotal] = useState();
-
-  const options = {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "X-RapidAPI-Key": "3a715ecf6dmsh42d397b5484cb27p1a146ejsn3a01e7e8200b",
-      "X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com",
-    },
-    body: '{"personalizations":[{"to":[{"email":"kenzieemma072@gmail.com"}],"subject":"Hello, World!"}],"from":{"email":"meghanroche20@gmail.com"},"content":[{"type":"text/plain","value":"Hello, World!"}]}',
-  };
-
-  fetch("https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send", options)
-    .then((response) => response.json())
-    .then((response) => console.log(response))
-    .catch((err) => console.error(err));
+  const [btctotal, setBtcTotal] = useState();
+  const [ethtotal, setEthTotal] = useState();
 
   useEffect(() => {
     let usdTotals = "";
@@ -52,6 +39,12 @@ const Header = ({ usdPurchase, gpbPurchase }) => {
       gbpTotals = (Number(price.Recieved) + Number(gbpTotals)).toFixed(2);
     });
     setGbpTotal(gbpTotals);
+
+    let btcTotals = "";
+    btcPurchase?.map((price) => {
+      btcTotals = (Number(price.Recieved) + Number(btcTotals)).toFixed(4);
+    });
+    setBtcTotal(btcTotals);
   });
 
   return (
@@ -73,7 +66,17 @@ const Header = ({ usdPurchase, gpbPurchase }) => {
                           USD
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {usdtotal} $
+                          {usdtotal ? (
+                            usdtotal
+                          ) : (
+                            <div
+                              class="spinner-border text-danger"
+                              role="status"
+                            >
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          )}{" "}
+                          $
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -103,7 +106,14 @@ const Header = ({ usdPurchase, gpbPurchase }) => {
                           Pound sterling
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {gbptotal} £
+                          {gbptotal ? (
+                            gbptotal
+                          ) : (
+                            <div class="spinner-border" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          )}{" "}
+                          £
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -132,7 +142,19 @@ const Header = ({ usdPurchase, gpbPurchase }) => {
                         >
                           BTC
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">0.0003</span>
+                        <span className="h2 font-weight-bold mb-0">
+                          {" "}
+                          {btctotal ? (
+                            btctotal
+                          ) : (
+                            <div
+                              class="spinner-border text-danger"
+                              role="status"
+                            >
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          )}{" "}
+                        </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-warning  text-white rounded-circle shadow">
