@@ -41,6 +41,8 @@ import Header from "components/Headers/Header.js";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
+import { auth } from "variables/FirebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Tables = () => {
   const [usdPurchase, setUsdPurchase] = useState();
@@ -48,82 +50,106 @@ const Tables = () => {
   const [btcPurchase, setBtcPurchase] = useState();
   const [ethPurchase, setEthPurchase] = useState();
 
-  const getUSDData = async () => {
-    try {
-      const usdArray = [];
-      const querySnapshot = await getDocs(
-        collection(
-          database,
-          "Transactions",
-          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
-          "USD"
-        )
-      );
+  const [userName, setUserName] = useState();
+  const [userEmail, setUserEmail] = useState();
+  const [userID, setUserID] = useState();
 
-      querySnapshot.forEach((doc) => usdArray.push(doc.data()));
-      setUsdPurchase(usdArray);
+  const getUser = () => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUserID(currentUser.uid);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getUser();
+  });
+
+  const getUSDData = async () => {
+    console.log(userID);
+    try {
+      if (userID) {
+        const usdArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "USD")
+        );
+        querySnapshot.forEach((doc) => usdArray.push(doc.data()));
+        setUsdPurchase(usdArray);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   const getGBPdata = async () => {
-    try {
-      const gbpArray = [];
-      const querySnapshot = await getDocs(
-        collection(
-          database,
-          "Transactions",
-          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
-          "GBP"
-        )
-      );
-
-      querySnapshot.forEach((doc) => gbpArray.push(doc.data()));
-
-      setGbpPurchase(gbpArray);
-    } catch (error) {
-      console.log(error);
-    }
+    if (userID)
+      try {
+        const gbpArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "GBP")
+        );
+        querySnapshot.forEach((doc) => gbpArray.push(doc.data()));
+        setGbpPurchase(gbpArray);
+      } catch (error) {
+        console.log(error);
+      }
   };
 
   const getBTCdata = async () => {
-    try {
-      const btcArray = [];
-      const querySnapshot = await getDocs(
-        collection(
-          database,
-          "Transactions",
-          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
-          "BTC"
-        )
-      );
+    if (userID)
+      try {
+        const btcArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "BTC")
+        );
 
-      querySnapshot.forEach((doc) => btcArray.push(doc.data()));
-      setBtcPurchase(btcArray);
-    } catch (error) {
-      console.log(error);
-    }
+        querySnapshot.forEach((doc) => {
+          btcArray.push(doc.data());
+        });
+        setBtcPurchase(btcArray);
+      } catch (error) {
+        console.log(error);
+      }
+  };
+
+  const getETHdata = async () => {
+    if (userID)
+      try {
+        const ethArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "ETH")
+        );
+
+        querySnapshot.forEach((doc) => ethArray.push(doc.data()));
+        setEthPurchase(ethArray);
+      } catch (error) {
+        console.log(error);
+      }
   };
 
   useEffect(() => {
     getUSDData();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     getGBPdata();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     getBTCdata();
-  }, []);
+  }, [userID]);
 
+  useEffect(() => {
+    getETHdata();
+  }, [userID]);
   return (
     <>
       <Header
         usdPurchase={usdPurchase}
         gpbPurchase={gbpPurchase}
         btcPurchase={btcPurchase}
+        ethPurchase={ethPurchase}
       />
       {/* Page content */}
       <Container className="mt--7" fluid>

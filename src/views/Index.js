@@ -21,7 +21,7 @@ import classnames from "classnames";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
+import { Line, Bar, Pie } from "react-chartjs-2";
 // reactstrap components
 import {
   Button,
@@ -49,10 +49,11 @@ import {
 import Header from "components/Headers/Header.js";
 import { collection, getDocs } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "variables/FirebaseConfig";
 
 const Index = () => {
   const [activeNav, setActiveNav] = useState(1);
-  const [chartExample1Data, setChartExample1Data] = useState("data1");
 
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
@@ -61,7 +62,6 @@ const Index = () => {
   const toggleNavs = (e, index) => {
     e.preventDefault();
     setActiveNav(index);
-    setChartExample1Data("data" + index);
   };
 
   //Databse setUp
@@ -71,75 +71,141 @@ const Index = () => {
   const [btcPurchase, setBtcPurchase] = useState();
   const [ethPurchase, setEthPurchase] = useState();
 
-  const getUSDData = async () => {
-    try {
-      const usdArray = [];
-      const querySnapshot = await getDocs(
-        collection(
-          database,
-          "Transactions",
-          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
-          "USD"
-        )
-      );
+  const [userName, setUserName] = useState();
+  const [userEmail, setUserEmail] = useState();
+  const [userID, setUserID] = useState();
 
-      querySnapshot.forEach((doc) => usdArray.push(doc.data()));
-      setUsdPurchase(usdArray);
+  const getUser = () => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUserID(currentUser.uid);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getUser();
+  });
+
+  const [graphUsd, setGraphUsd] = useState([]);
+  const [graphUsdDate, setGraphUsdDate] = useState([]);
+
+  const [graphGbp, setGraphGbp] = useState([]);
+  const [graphGbpDate, setGraphGbpDate] = useState([]);
+
+  const [graphBtc, setGraphBtc] = useState([]);
+  const [graphBtcDate, setGraphBtcDate] = useState([]);
+
+  const [graphEth, setGraphEth] = useState([]);
+  const [graphEthDate, setGraphEthDate] = useState([]);
+
+  const getUSDData = async () => {
+    console.log(userID);
+    try {
+      if (userID) {
+        const usdArray = [];
+        const graphUsDArray = [];
+        const graphUsdDateArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "USD")
+        );
+        querySnapshot.forEach((doc) => {
+          usdArray.push(doc.data());
+          graphUsDArray.push(doc.data().Amount);
+          graphUsdDateArray.push(doc.data().date);
+        });
+        setUsdPurchase(usdArray);
+        setGraphUsdDate(graphUsdDateArray);
+        setGraphUsd(graphUsDArray);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   const getGBPdata = async () => {
-    try {
-      const gbpArray = [];
-      const querySnapshot = await getDocs(
-        collection(
-          database,
-          "Transactions",
-          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
-          "GBP"
-        )
-      );
-
-      querySnapshot.forEach((doc) => gbpArray.push(doc.data()));
-
-      setGbpPurchase(gbpArray);
-    } catch (error) {
-      console.log(error);
-    }
+    if (userID)
+      try {
+        const gbpArray = [];
+        const graphGbpArray = [];
+        const graphGbpDateArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "GBP")
+        );
+        querySnapshot.forEach((doc) => {
+          gbpArray.push(doc.data());
+          graphGbpArray.push(doc.data().Amount);
+          graphGbpDateArray.push(doc.data().date);
+        });
+        setGbpPurchase(gbpArray);
+        setGraphGbpDate(graphGbpDateArray);
+        setGraphGbp(graphGbpArray);
+      } catch (error) {
+        console.log(error);
+      }
   };
 
   const getBTCdata = async () => {
-    try {
-      const btcArray = [];
-      const querySnapshot = await getDocs(
-        collection(
-          database,
-          "Transactions",
-          "1VNX7bfiadXFXU7OcVE47l3mMDI2",
-          "BTC"
-        )
-      );
+    if (userID)
+      try {
+        const btcArray = [];
+        const graphBtcArray = [];
+        const graphBtcDateArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "BTC")
+        );
 
-      querySnapshot.forEach((doc) => btcArray.push(doc.data()));
-      setBtcPurchase(btcArray);
-    } catch (error) {
-      console.log(error);
-    }
+        querySnapshot.forEach((doc) => {
+          btcArray.push(doc.data());
+          graphBtcArray.push(doc.data().Amount);
+          graphBtcDateArray.push(doc.data().date);
+        });
+        setBtcPurchase(btcArray);
+        setGraphBtcDate(graphBtcDateArray);
+        setGraphBtc(graphBtcArray);
+      } catch (error) {
+        console.log(error);
+      }
+  };
+
+  const getETHdata = async () => {
+    if (userID)
+      try {
+        const ethArray = [];
+        const graphEthArray = [];
+        const graphEthDateArray = [];
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "ETH")
+        );
+
+        querySnapshot.forEach((doc) => {
+          ethArray.push(doc.data());
+          graphEthArray.push(doc.data().Amount);
+          graphEthDateArray.push(doc.data().date);
+        });
+        setEthPurchase(ethArray);
+        setGraphEthDate(graphEthDateArray);
+        setGraphEth(graphEthArray);
+      } catch (error) {
+        throw error;
+      }
   };
 
   useEffect(() => {
     getUSDData();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     getGBPdata();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     getBTCdata();
-  }, []);
+  }, [userID]);
+
+  useEffect(() => {
+    getETHdata();
+  }, [userID]);
 
   return (
     <>
@@ -147,11 +213,12 @@ const Index = () => {
         usdPurchase={usdPurchase}
         gpbPurchase={gbpPurchase}
         btcPurchase={btcPurchase}
+        ethPurchase={ethPurchase}
       />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="mb-5 mb-xl-0" xl="8">
+          <Col className="mb-5 mb-xl-0 col-12 my-4">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -162,7 +229,7 @@ const Index = () => {
                     <h2 className="text-white mb-0">Sales value</h2>
                   </div>
                   <div className="col">
-                    <Nav className="justify-content-end" pills>
+                    <Nav className="justify-content-end w-100 " pills>
                       <NavItem>
                         <NavLink
                           className={classnames("py-2 px-3", {
@@ -171,7 +238,7 @@ const Index = () => {
                           href="#pablo"
                           onClick={(e) => toggleNavs(e, 1)}
                         >
-                          <span className="d-none d-md-block">Month</span>
+                          <span className="d-none d-md-block">USD</span>
                           <span className="d-md-none">M</span>
                         </NavLink>
                       </NavItem>
@@ -184,8 +251,32 @@ const Index = () => {
                           href="#pablo"
                           onClick={(e) => toggleNavs(e, 2)}
                         >
-                          <span className="d-none d-md-block">Week</span>
+                          <span className="d-none d-md-block">GBP</span>
                           <span className="d-md-none">W</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 3,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 3)}
+                        >
+                          <span className="d-none d-md-block">BTC</span>
+                          <span className="d-md-none">M</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 4,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 4)}
+                        >
+                          <span className="d-none d-md-block">ETH</span>
+                          <span className="d-md-none">M</span>
                         </NavLink>
                       </NavItem>
                     </Nav>
@@ -196,23 +287,207 @@ const Index = () => {
                 {/* Chart */}
                 <div className="chart">
                   <Line
-                    data={chartExample1[chartExample1Data]}
-                    options={chartExample1.options}
+                    data={{
+                      labels:
+                        activeNav === 1
+                          ? graphUsdDate
+                          : activeNav === 2
+                          ? graphGbpDate
+                          : activeNav === 3
+                          ? graphBtcDate
+                          : activeNav === 4
+                          ? graphEthDate
+                          : ["First deposit"],
+                      datasets: [
+                        {
+                          fill: true,
+                          label: "Deposits GHC",
+                          data:
+                            activeNav === 1
+                              ? [0, ...graphUsd]
+                              : activeNav === 2
+                              ? graphGbp
+                              : activeNav === 3
+                              ? [0, ...graphBtc]
+                              : activeNav === 4
+                              ? [0, ...graphEth]
+                              : ["First deposit"],
+                          maxBarThickness: 10,
+                        },
+                      ],
+                    }}
                     getDatasetAtEvent={(e) => console.log(e)}
                   />
                 </div>
               </CardBody>
             </Card>
           </Col>
-          <Col xl="4">
-            <Card className="shadow">
+
+          <Col className="mb-5 mb-xl-0  col-12 col-md-6 my-4">
+            <Card className="bg-dark shadow">
+              <CardHeader className="bg-transparent">
+                <Row className="align-items-center">
+                  <div className="col-4">
+                    <h6 className="text-uppercase text-light ls-1 mb-1">
+                      Overview
+                    </h6>
+                    <h2 className="text-white mb-0">Sales value</h2>
+                  </div>
+                  <div className="col">
+                    <Nav className="justify-content-end w-100 " pills>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 1,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 1)}
+                        >
+                          <span className="d-none d-md-block">USD</span>
+                          <span className="d-md-none">M</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 2,
+                          })}
+                          data-toggle="tab"
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 2)}
+                        >
+                          <span className="d-none d-md-block">GBP</span>
+                          <span className="d-md-none">W</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 3,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 3)}
+                        >
+                          <span className="d-none d-md-block">BTC</span>
+                          <span className="d-md-none">M</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 4,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 4)}
+                        >
+                          <span className="d-none d-md-block">ETH</span>
+                          <span className="d-md-none">M</span>
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
+                  </div>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                {/* Chart */}
+                <div className="chart">
+                  <Pie
+                    data={{
+                      labels:
+                        activeNav === 1
+                          ? graphUsdDate
+                          : activeNav === 2
+                          ? graphGbpDate
+                          : activeNav === 3
+                          ? graphBtcDate
+                          : activeNav === 4
+                          ? graphEthDate
+                          : ["First deposit"],
+                      datasets: [
+                        {
+                          label: "Deposits GHC",
+                          data:
+                            activeNav === 1
+                              ? graphUsd
+                              : activeNav === 2
+                              ? graphGbp
+                              : activeNav === 3
+                              ? graphBtc
+                              : activeNav === 4
+                              ? graphEth
+                              : ["First deposit"],
+                          maxBarThickness: 50,
+                        },
+                      ],
+                    }}
+                    getDatasetAtEvent={(e) => console.log(e)}
+                  />
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col className="mb-5 mb-xl-0  col-12 col-md-6 my-4">
+            <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h6 className="text-uppercase text-muted ls-1 mb-1">
-                      Performance
+                    <h6 className="text-uppercase text-light ls-1 mb-1">
+                      Overview
                     </h6>
-                    <h2 className="mb-0">Total orders</h2>
+                    <h2 className="text-white mb-0">Sales value</h2>
+                  </div>
+                  <div className="col col-md-8">
+                    <Nav className="justify-content-end w-100 " pills>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 1,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 1)}
+                        >
+                          <span className="d-none d-md-block">USD</span>
+                          <span className="d-md-none">M</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 2,
+                          })}
+                          data-toggle="tab"
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 2)}
+                        >
+                          <span className="d-none d-md-block">GBP</span>
+                          <span className="d-md-none">W</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 3,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 3)}
+                        >
+                          <span className="d-none d-md-block">BTC</span>
+                          <span className="d-md-none">M</span>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames("py-2 px-3", {
+                            active: activeNav === 4,
+                          })}
+                          href="#pablo"
+                          onClick={(e) => toggleNavs(e, 4)}
+                        >
+                          <span className="d-none d-md-block">ETH</span>
+                          <span className="d-md-none">M</span>
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
                   </div>
                 </Row>
               </CardHeader>
@@ -221,15 +496,34 @@ const Index = () => {
                 <div className="chart">
                   <Bar
                     data={{
-                      labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+                      labels:
+                        activeNav === 1
+                          ? graphUsdDate
+                          : activeNav === 2
+                          ? graphGbpDate
+                          : activeNav === 3
+                          ? graphBtcDate
+                          : activeNav === 4
+                          ? graphEthDate
+                          : ["First deposit"],
                       datasets: [
                         {
-                          label: "Sales",
-                          data: [25, 5, 30, 22, 17, 29, 9],
+                          label: "Deposits GHC",
+                          data:
+                            activeNav === 1
+                              ? graphUsd
+                              : activeNav === 2
+                              ? graphGbp
+                              : activeNav === 3
+                              ? graphBtc
+                              : activeNav === 4
+                              ? graphEth
+                              : ["First deposit"],
                           maxBarThickness: 10,
                         },
                       ],
                     }}
+                    getDatasetAtEvent={(e) => console.log(e)}
                   />
                 </div>
               </CardBody>

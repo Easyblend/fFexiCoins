@@ -265,7 +265,7 @@ function chartOptions() {
       drawTicks: false,
       lineWidth: 0,
       zeroLineWidth: 0,
-      zeroLineColor: mode === "dark" ? colors.gray[900] : colors.gray[300],
+      zeroLineColor: mode === "light" ? colors.gray[900] : colors.gray[300],
       zeroLineBorderDash: [2],
       zeroLineBorderDashOffset: [2],
     },
@@ -313,7 +313,7 @@ let chartExample1 = {
       yAxes: [
         {
           gridLines: {
-            color: colors.gray[900],
+            color: colors.gray[500],
             zeroLineColor: colors.gray[900],
           },
           ticks: {

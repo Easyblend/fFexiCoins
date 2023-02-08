@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
+const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
   const [usdtotal, setUsdTotal] = useState();
   const [gbptotal, setGbpTotal] = useState();
   const [btctotal, setBtcTotal] = useState();
@@ -45,6 +45,12 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
       btcTotals = (Number(price.Recieved) + Number(btcTotals)).toFixed(4);
     });
     setBtcTotal(btcTotals);
+
+    let ethTotals = "";
+    ethPurchase?.map((price) => {
+      ethTotals = (Number(price.Recieved) + Number(ethTotals)).toFixed(4);
+    });
+    setEthTotal(ethTotals);
   });
 
   return (
@@ -69,10 +75,7 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                           {usdtotal ? (
                             usdtotal
                           ) : (
-                            <div
-                              class="spinner-border text-danger"
-                              role="status"
-                            >
+                            <div class="spinner-grow text-danger" role="status">
                               <span class="sr-only">Loading...</span>
                             </div>
                           )}{" "}
@@ -87,9 +90,9 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 3.48%
+                        <i className="fa fa-arrow-up" /> Status
                       </span>{" "}
-                      <span className="text-nowrap">Since last month</span>
+                      <span className="text-nowrap">High Demand</span>
                     </p>
                   </CardBody>
                 </Card>
@@ -109,7 +112,7 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                           {gbptotal ? (
                             gbptotal
                           ) : (
-                            <div class="spinner-border" role="status">
+                            <div class="spinner-grow" role="status">
                               <span class="sr-only">Loading...</span>
                             </div>
                           )}{" "}
@@ -124,9 +127,9 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-danger mr-2">
-                        <i className="fas fa-arrow-down" /> 3.48%
+                        <i className="fas fa-arrow-down" /> Status
                       </span>{" "}
-                      <span className="text-nowrap">Since last week</span>
+                      <span className="text-nowrap">Low Demand</span>
                     </p>
                   </CardBody>
                 </Card>
@@ -140,20 +143,18 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          BTC
+                          Bitcoin
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {" "}
                           {btctotal ? (
                             btctotal
                           ) : (
-                            <div
-                              class="spinner-border text-danger"
-                              role="status"
-                            >
+                            <div class="spinner-grow text-danger" role="status">
                               <span class="sr-only">Loading...</span>
                             </div>
                           )}{" "}
+                          BTC
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -163,10 +164,10 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      <span className="text-warning mr-2">
-                        <i className="fas fa-arrow-down" /> 1.10%
+                      <span className="text-success mr-2">
+                        <i className="fas fa-arrow-up" /> Status
                       </span>{" "}
-                      <span className="text-nowrap">Since yesterday</span>
+                      <span className="text-nowrap">High Demand</span>
                     </p>
                   </CardBody>
                 </Card>
@@ -180,9 +181,19 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          ETH
+                          Ethereum
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">0.2839</span>
+                        <span className="h2 font-weight-bold mb-0">
+                          {" "}
+                          {ethtotal ? (
+                            ethtotal
+                          ) : (
+                            <div class="spinner-grow text-danger" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          )}{" "}
+                          ETH
+                        </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-dark text-white rounded-circle shadow">
@@ -192,9 +203,9 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase }) => {
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-success mr-2">
-                        <i className="fas fa-arrow-up" /> 12%
+                        <i className="fas fa-arrow-up" /> Status
                       </span>{" "}
-                      <span className="text-nowrap">Since last month</span>
+                      <span className="text-nowrap">High Demand</span>
                     </p>
                   </CardBody>
                 </Card>

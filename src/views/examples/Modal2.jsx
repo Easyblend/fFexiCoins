@@ -35,7 +35,7 @@ const Modal2 = ({
 
   const [referal, setReferal] = useState("");
   const [phone, setPhone] = useState("");
-  const [recieve, setRecieve] = useState("");
+  const [recieve, setRecieve] = useState(0);
 
   const [currencyType, setCurrencyType] = useState("BTC");
 

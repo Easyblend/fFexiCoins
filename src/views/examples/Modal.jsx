@@ -34,7 +34,7 @@ const Modal = ({
 
   const [referal, setReferal] = useState("No referal");
   const [phone, setPhone] = useState("");
-  const [recieve, setRecieve] = useState("");
+  const [recieve, setRecieve] = useState(0);
 
   const [currencyType, setCurrencyType] = useState("USD");
 
