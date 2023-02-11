@@ -33,6 +33,8 @@ import Modal2 from "views/examples/Modal2";
 import Modal from "views/examples/Modal";
 import { toast } from "react-toastify";
 
+import video from "../assets/video.mp4";
+
 const Admin = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -188,6 +190,21 @@ const Admin = (props) => {
 
   return (
     <>
+      {/* <video
+        className="p-0 p-sm-5"
+        controls
+        style={{
+          width: "100%",
+          height: "auto",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+          zIndex: "100",
+        }}
+      >
+        <source src={video} type="video/mp4" />
+      </video> */}
       <Sidebar
         {...props}
         routes={routes}

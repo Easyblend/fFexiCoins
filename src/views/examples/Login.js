@@ -49,6 +49,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const [view, setView] = useState("password");
   const logIn = async (e) => {
     e.preventDefault();
     try {
@@ -131,11 +132,15 @@ const Login = () => {
                   </InputGroupAddon>
                   <Input
                     placeholder="Password"
-                    type="password"
+                    type={view}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="new-password"
                   />
+                  <Button onClick={() => setView("text")}>
+                    {" "}
+                    <i className="ni ni-lock-circle-open" />
+                  </Button>
                 </InputGroup>
               </FormGroup>
               <div className="custom-control custom-control-alternative custom-checkbox">

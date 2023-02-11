@@ -54,7 +54,7 @@ const Modal = ({
         const paystack = new PaystackPop();
 
         paystack.newTransaction({
-          key: "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1",
+          key: /*"pk_live_84dfea03aa77b8f9e9535fcfbfd4ac64834184e6"*/ "pk_test_26dc23e6eff2d80b88ef3dd7768062b646b2feb1",
           email: email,
           amount: purchasingAmount * 100,
           onSuccess: async () => {

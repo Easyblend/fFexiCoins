@@ -51,6 +51,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "variables/FirebaseConfig";
+import { transform } from "typescript";
 
 const Index = () => {
   const [activeNav, setActiveNav] = useState(1);
@@ -306,7 +307,7 @@ const Index = () => {
                             activeNav === 1
                               ? [0, ...graphUsd]
                               : activeNav === 2
-                              ? graphGbp
+                              ? [0, ...graphGbp]
                               : activeNav === 3
                               ? [0, ...graphBtc]
                               : activeNav === 4
@@ -550,7 +551,7 @@ const Index = () => {
                   </div>
                 </Row>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              {/* <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Page name</th>
@@ -712,7 +713,7 @@ const Index = () => {
                     </td>
                   </tr>
                 </tbody>
-              </Table>
+              </Table> */}
             </Card>
           </Col>
         </Row>
