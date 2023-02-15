@@ -53,6 +53,32 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
     setEthTotal(ethTotals);
   });
 
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": process.env.REACT_APP_CURRENCY_API,
+      "X-RapidAPI-Host": "currency-converter-by-api-ninjas.p.rapidapi.com",
+    },
+  };
+
+  const [dollarRate, setDollarRate] = useState(0);
+  const getDollarRate = async () => {
+    try {
+      const response = await fetch(
+        "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=GHS&want=USD&amount=1",
+        options
+      );
+      const data = await response.json();
+      setDollarRate(data.new_amount);
+    } catch (error) {
+      toast.info("error");
+    }
+  };
+
+  useEffect(() => {
+    getDollarRate();
+  });
+
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -90,9 +116,11 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> Status
+                        <i className="fa fa-arrow-up" /> Valued at
                       </span>{" "}
-                      <span className="text-nowrap">High Demand</span>
+                      <span className="text-nowrap">
+                        {usdtotal / dollarRate} GHC
+                      </span>
                     </p>
                   </CardBody>
                 </Card>
@@ -150,7 +178,10 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                           {btctotal ? (
                             btctotal
                           ) : (
-                            <div class="spinner-grow text-danger" role="status">
+                            <div
+                              class="spinner-grow text-warning"
+                              role="status"
+                            >
                               <span class="sr-only">Loading...</span>
                             </div>
                           )}{" "}
@@ -188,7 +219,7 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                           {ethtotal ? (
                             ethtotal
                           ) : (
-                            <div class="spinner-grow text-danger" role="status">
+                            <div class="spinner-grow text-dark" role="status">
                               <span class="sr-only">Loading...</span>
                             </div>
                           )}{" "}

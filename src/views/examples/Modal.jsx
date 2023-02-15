@@ -71,6 +71,7 @@ const Modal = ({
                     Recieved: recieve,
                     what_Purchased: currencyType,
                     date: date,
+                    dateInitial: date.slice(0, 3),
                     phone: phone,
                   }
                 ),
