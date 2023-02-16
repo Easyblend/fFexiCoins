@@ -151,7 +151,7 @@ const Tables = () => {
     getETHdata();
   }, [userID]);
 
-  const [usdLength, setUsdLength] = useState(3);
+  const [usdLength, setUsdLength] = useState(2);
 
   return (
     <>
@@ -166,89 +166,95 @@ const Tables = () => {
         {/* Table */}
         <Row>
           <div className="col">
-            <Card className="shadow ">
-              <CardHeader className="border-0">
-                <h3 className="mb-0">USD Purchased History</h3>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Purchase</th>
-                    <th scope="col">Recieved</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {usdPurchase ? (
-                    usdPurchase.map((eachPurchase, index) => {
-                      return index <= usdLength ? (
-                        <tr>
-                          <th scope="row">
-                            <Media className="align-items-center">
-                              <img
-                                alt="..."
-                                src={photoUrl}
-                                className="avatar rounded-circle mr-3"
-                              />
+            {usdPurchase ? (
+              <Card className="shadow ">
+                <CardHeader className="border-0">
+                  <h3 className="mb-0">USD Purchased History</h3>
+                </CardHeader>{" "}
+                <Table className="align-items-center table-flush" responsive>
+                  <thead className="thead-light">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Purchase</th>
+                      <th scope="col">Recieved</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usdPurchase ? (
+                      usdPurchase.map((eachPurchase, index) => {
+                        return index <= usdLength ? (
+                          <tr>
+                            <th scope="row">
+                              <Media className="align-items-center">
+                                <img
+                                  alt="..."
+                                  src={photoUrl}
+                                  className="avatar rounded-circle mr-3"
+                                />
 
-                              <Media>
-                                <span className="mb-0 text-sm">
-                                  {eachPurchase.Name}
-                                </span>
+                                <Media>
+                                  <span className="mb-0 text-sm">
+                                    {eachPurchase.Name}
+                                  </span>
+                                </Media>
                               </Media>
-                            </Media>
-                          </th>
-                          <td>
-                            <Badge color="" className="badge-dot mr-4">
-                              <i className="bg-danger" />
-                              {eachPurchase.Amount} GHS{" "}
-                            </Badge>
-                          </td>
-                          <td>
-                            <Badge color="" className="badge-dot mr-4">
-                              <i className="bg-success" />
-                              {eachPurchase.Recieved} USD{" "}
-                            </Badge>
-                          </td>
-                          <td>{eachPurchase.date}</td>
-                          <td>{eachPurchase.phone}</td>
-                        </tr>
-                      ) : (
-                        ""
-                      );
-                    })
-                  ) : (
-                    <div className="p-4 d-flex w-100 mx-auto text-center justify-content-center">
-                      <div class="spinner-grow text-danger" role="status">
-                        <span class="sr-only">Loading...</span>
+                            </th>
+                            <td>
+                              <Badge color="" className="badge-dot mr-4">
+                                <i className="bg-danger" />
+                                {eachPurchase.Amount} GHS{" "}
+                              </Badge>
+                            </td>
+                            <td>
+                              <Badge color="" className="badge-dot mr-4">
+                                <i className="bg-success" />
+                                {eachPurchase.Recieved} USD{" "}
+                              </Badge>
+                            </td>
+                            <td>{eachPurchase.date}</td>
+                            <td>{eachPurchase.phone}</td>
+                          </tr>
+                        ) : (
+                          ""
+                        );
+                      })
+                    ) : (
+                      <div className="p-4 d-flex w-100 mx-auto text-center justify-content-center">
+                        <div class="spinner-grow text-danger" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </tbody>
-              </Table>
-              <CardFooter className="py-4">
-                <nav aria-label="...">
-                  {usdLength === 3 ? (
-                    <Button
-                      className="ms-auto"
-                      onClick={() => setUsdLength(usdPurchase.length)}
-                    >
-                      View All Transactions
-                    </Button>
-                  ) : (
-                    <Button
-                      className="btn-danger"
-                      onClick={() => setUsdLength(3)}
-                    >
-                      Hide Transactions
-                    </Button>
-                  )}
-                </nav>
-              </CardFooter>
-            </Card>
+                    )}
+                  </tbody>
+                </Table>{" "}
+                {usdPurchase.length > 2 ? (
+                  <CardFooter className="py-4">
+                    <nav aria-label="...">
+                      {usdLength === 2 ? (
+                        <Button
+                          className="ms-auto"
+                          onClick={() => setUsdLength(usdPurchase.length)}
+                        >
+                          View All Transactions
+                        </Button>
+                      ) : (
+                        <Button
+                          className="btn-danger"
+                          onClick={() => setUsdLength(2)}
+                        >
+                          Hide Transactions
+                        </Button>
+                      )}
+                    </nav>
+                  </CardFooter>
+                ) : null}
+              </Card>
+            ) : (
+              <Button>Buy USD</Button>
+            )}
           </div>
         </Row>
         {/* Dark table */}
