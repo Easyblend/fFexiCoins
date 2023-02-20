@@ -71,7 +71,7 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
       const data = await response.json();
       setDollarRate(data.new_amount);
     } catch (error) {
-      toast.info("error");
+      toast.info("Network error");
     }
   };
 
