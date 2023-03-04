@@ -24,6 +24,10 @@ import {
 import React, { useState } from "react";
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import { Link } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "variables/FirebaseConfig";
+import { useNavigate } from "react-router-dom-v5-compat";
+import { toast } from "react-toastify";
 
 const WidthrawPage = () => {
   const [usdWithdrawal, setUsdWithdrawal] = useState(false);
@@ -36,6 +40,8 @@ const WidthrawPage = () => {
   const [photoUrl, setPhotoUrl] = useState(
     "https://www.grovenetworks.com/images/easyblog_shared/July_2018/7-4-18/b2ap3_large_totw_network_profile_400.jpg"
   );
+
+  const navigate = useNavigate();
 
   return (
     <div className="py-3">
@@ -62,15 +68,15 @@ const WidthrawPage = () => {
             <span>Return to Home</span>
           </DropdownItem>
           <DropdownItem
-          // onClick={async () => {
-          //   try {
-          //     alert("Loging out");
-          //     await signOut(auth);
-          //     naviagte("/login");
-          //   } catch (error) {
-          //     toast.error("this error occured: " + error.code);
-          //   }
-          // }}
+            onClick={async () => {
+              try {
+                alert("Loging out");
+                await signOut(auth);
+                navigate("/login");
+              } catch (error) {
+                toast.error("this error occured: " + error.code);
+              }
+            }}
           >
             <i className="ni ni-user-run" />
             <span>Logout</span>
