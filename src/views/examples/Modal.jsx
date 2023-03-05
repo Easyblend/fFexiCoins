@@ -31,6 +31,9 @@ const Modal = ({
     hour: "numeric",
     minute: "numeric",
   }).format(new Date());
+  const day = new Intl.DateTimeFormat("en-US", {
+    day: "numeric",
+  }).format(new Date());
 
   const [referal, setReferal] = useState("No referal");
   const [phone, setPhone] = useState("");
@@ -71,7 +74,7 @@ const Modal = ({
                     Recieved: recieve,
                     what_Purchased: currencyType,
                     date: date,
-                    dateInitial: date.slice(0, 3),
+                    dateInitial: day + " " + date.slice(0, 3),
                     phone: phone,
                   }
                 ),

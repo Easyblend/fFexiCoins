@@ -74,9 +74,23 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
       toast.info("Network error");
     }
   };
+  const [gbpRate, setGbpRate] = useState(0);
+  const getGbpRate = async () => {
+    try {
+      const response = await fetch(
+        "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=GHS&want=GBP&amount=1",
+        options
+      );
+      const data = await response.json();
+      setGbpRate(data.new_amount);
+    } catch (error) {
+      toast.info("Network error");
+    }
+  };
 
   useEffect(() => {
     getDollarRate();
+    getGbpRate();
   });
 
   return (
@@ -118,8 +132,8 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                       <span className="text-success mr-2">
                         <i className="fa fa-arrow-up" /> Valued at
                       </span>{" "}
-                      <span className="text-nowrap">
-                        {usdtotal / dollarRate} GHC
+                      <span className="text-nowrap h4">
+                        {(usdtotal / dollarRate).toFixed(2)} GHC
                       </span>
                     </p>
                   </CardBody>
@@ -154,10 +168,13 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      <span className="text-danger mr-2">
-                        <i className="fas fa-arrow-down" /> Status
+                      <span className="text-success mr-2">
+                        <i className="fas fa-arrow-up" /> Valued at
                       </span>{" "}
-                      <span className="text-nowrap">Low Demand</span>
+                      <span className="text-nowrap h4">
+                        {" "}
+                        {(gbptotal / gbpRate).toFixed(2)} GHC
+                      </span>
                     </p>
                   </CardBody>
                 </Card>

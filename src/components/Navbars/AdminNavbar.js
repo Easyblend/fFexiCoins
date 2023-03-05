@@ -53,8 +53,6 @@ const AdminNavbar = (props) => {
 
   useEffect(getUser, []);
 
-  console.log(photoUrl);
-
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">

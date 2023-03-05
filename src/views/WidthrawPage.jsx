@@ -20,6 +20,7 @@ import {
   UncontrolledDropdown,
   DropdownItem,
   DropdownMenu,
+  NavbarBrand,
 } from "reactstrap";
 import React, { useState } from "react";
 import AdminNavbar from "components/Navbars/AdminNavbar";
@@ -28,6 +29,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "variables/FirebaseConfig";
 import { useNavigate } from "react-router-dom-v5-compat";
 import { toast } from "react-toastify";
+import Logo from "../assets/img/brand/fotor_2023-1-25_16_1_8.png";
 
 const WidthrawPage = () => {
   const [usdWithdrawal, setUsdWithdrawal] = useState(false);
@@ -44,11 +46,18 @@ const WidthrawPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="py-3">
+    <div className="pb-3">
       <UncontrolledDropdown
         nav
-        className="pb-5 mx-5 justify-content-end d-flex"
+        className=" py-2 px-3 px-md-5 justify-content-between d-flex shadow-lg"
       >
+        <NavbarBrand className="pt-0">
+          {/* <img src="" alt="logo" /> */}
+          <img src={Logo} alt="Missing" width="50px" height="auto" />{" "}
+          <span className="ml-2 text-dark h2 d-none d-md-inline">
+            FlexiCoins
+          </span>
+        </NavbarBrand>
         <DropdownToggle className="pr-0" nav>
           <Media className="align-items-center">
             <span className="avatar avatar-sm rounded-circle">
@@ -83,12 +92,12 @@ const WidthrawPage = () => {
           </DropdownItem>
         </DropdownMenu>
       </UncontrolledDropdown>
-      <div>
+      <div className="mt-3">
         <h1 className="text-center display-3 fw-bold">Withdraw Funds</h1>
         <div className="header pb-8 pt-3 pt-md-5">
-          <h4 className="text-center text-dark mb-3">
+          <h3 className="text-center text-dark mb-3">
             Pick an account to withdraw from
-          </h4>
+          </h3>
           <Container
             fluid
             className="px-4 px-sm-6"
