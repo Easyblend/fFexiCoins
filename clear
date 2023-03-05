@@ -1,0 +1,527 @@
+[33mcommit 6b969ad61963e2339b28c88f9f95fda363e879fd[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Wed Feb 8 13:52:08 2023 +0000
+
+    matched the data on a graph and also added a dougnut graph
+
+[33mcommit 8e4cb719a894f81b9205dad7ed163c4893e8328b[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Mon Feb 6 11:52:31 2023 +0000
+
+    added real time currency purchase and account balance update to flexicoins.
+
+[33mcommit 5a6977e40198691cfd2ead00b35910ec5edc29c7[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Sun Feb 5 18:46:57 2023 +0000
+
+    added the btc and usd purchase to databse
+
+[33mcommit cc4f057d7be898ec10fcd6704848a303db9bf49c[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Sun Feb 5 13:58:08 2023 +0000
+
+    added the purchased balance to database and displayed them as account balance
+
+[33mcommit 32c9bf1dfb552506c0497da80ec37560c5bfc496[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Sun Feb 5 09:21:42 2023 +0000
+
+    moved the withdrawal component into a separate form
+
+[33mcommit 6a0b2557834d3d1e800084cd822a796920ada8f6[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Fri Feb 3 10:30:03 2023 +0000
+
+    added more ui touches to the withdrawal page
+
+[33mcommit c7ceea5ae617849c560cec462e23fedbdd969873[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Fri Feb 3 09:13:30 2023 +0000
+
+    started with the withdrawal page
+
+[33mcommit becdd804946340d227de7e725a74d623a0037d88[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Thu Feb 2 23:16:21 2023 +0000
+
+    changed the static prices on the header
+
+[33mcommit feb70d346f37236b2de38460b4da9c6695d4fdd6[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Wed Feb 1 08:20:58 2023 +0000
+
+    toast.error gave too many popups so i threw the errors insteading of logging them
+
+[33mcommit 6ae213818f1254819d079a1ebfc70478cdf66370[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Wed Feb 1 08:14:04 2023 +0000
+
+    adding error boundaries to the api request
+
+[33mcommit 2f5f54978ec735a0ffe8283503f4dfbb0b8a7727[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Mon Jan 30 21:33:51 2023 +0000
+
+    added the paystack payment and restructured the database to keep count of referals and finances
+
+[33mcommit a58268a13cf50b6f2898396694d4bcf31b9f4f1a[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Sun Jan 29 22:48:24 2023 +0000
+
+    added a referal count to the application
+
+[33mcommit 129da963638c2948951019d607cbd93920f3b0cb[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Sun Jan 29 00:32:54 2023 +0000
+
+    trying to fix firebase update
+
+[33mcommit 6b260f7ce917e7e8ecb8f02ef9cdcedcb047b339[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Sat Jan 28 19:07:12 2023 +0000
+
+    found a way to update arrays in database without overwrite
+
+[33mcommit c4306f4c74ab814d9a850db25020a65d40f9c8a2[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Thu Jan 26 23:11:41 2023 +0000
+
+    stored each user who signs up
+
+[33mcommit 43ff3f2cc3557346f898e8e4fe2b6a4f1df82638[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Thu Jan 26 23:10:58 2023 +0000
+
+    added the crypto API
+
+[33mcommit 892e2295286708413142af46a58d0b4620166827[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Thu Jan 26 11:03:23 2023 +0000
+
+    added crypto api to get lastest btc and eth rate in dollars
+
+[33mcommit 93bca9ef8fe5c3a92e9fcfb8a8eac9c32b925a72[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Thu Jan 26 08:45:58 2023 +0000
+
+    updated readme grammer
+
+[33mcommit 41a47f65e5fdd51054fbc032d2a420d4b919d595[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Thu Jan 26 08:43:57 2023 +0000
+
+    Updated the readme file
+
+[33mcommit 9e4feb7622ed819905a3f382f647cc2c859beeb4[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Wed Jan 25 18:12:24 2023 +0000
+
+    removed .env
+
+[33mcommit fc12d62c94eb3ae32c6b6e5d41d261e5e2d77cc7[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Wed Jan 25 18:03:27 2023 +0000
+
+    moved all keys to env variables
+
+[33mcommit 3eb21be50e34e157b744c7f8bc64dbb7c44b7b0e[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Wed Jan 25 18:02:24 2023 +0000
+
+    moved all keys to env variables
+
+[33mcommit de89ec5920a5ceb3d7ebbe2328e24211363c4455[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Wed Jan 25 12:28:24 2023 +0000
+
+    embedded the currency api and created the currency purchasing modal
+
+[33mcommit aefe2b305682a26560b35cc0c5bd747f7fb611ea[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Tue Jan 24 21:36:55 2023 +0000
+
+    added a non functioning modal for the payment
+
+[33mcommit 62b1815e017096a5630ba41596a910083ee00e94[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Tue Jan 24 21:13:36 2023 +0000
+
+    understood the charts js
+
+[33mcommit 2844fabf4276ab2213057466677b989cee18ec18[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Tue Jan 24 21:11:35 2023 +0000
+
+    added an update feature to profile page
+
+[33mcommit c73b726267718494df321d05316cd82d17f732c1[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Mon Jan 23 23:33:02 2023 +0000
+
+    added the photo as user's photo and added user's name
+
+[33mcommit a907ce44889dff0322d0440ed525326284a0b39a[m
+Author: easyblend <kenzieemma072@gmail.com>
+Date:   Mon Jan 23 22:55:17 2023 +0000
+
+    commited the whole project
+
+[33mcommit 615ea4d5b0d9ecc7e1b735ef6a18e173dd3ccb02[m
+Author: sajadevo <nawabisajadahmad@gmail.com>
+Date:   Fri Aug 26 12:17:48 2022 +0430
+
+    update the changelog
+
+[33mcommit 53576ff26c5951e3fc5b1acb0f41a254112cee47[m[33m ([m[1;33mtag: 1.2.2[m[33m)[m
+Author: sajadevo <nawabisajadahmad@gmail.com>
+Date:   Fri Aug 26 12:16:10 2022 +0430
+
+    update the changelog
+
+[33mcommit 01e168e17c45a28d7e8abe2ea5691c3ae65950e7[m
+Merge: 35f9cb3 7cb3e20
+Author: Sajad Ahmad Nawabi <nawabisajadahmad@gmail.com>
+Date:   Fri Aug 26 12:13:09 2022 +0430
+
+    Merge pull request #72 from creativetimofficial/dev-main
+    
+    Dev main
+
+[33mcommit 7cb3e20d68b40794a8e594b8f7abd272969f16ef[m
+Merge: 80184a5 e0db5bc
+Author: Sajad Ahmad Nawabi <nawabisajadahmad@gmail.com>
+Date:   Fri Aug 26 12:12:55 2022 +0430
+
+    Merge pull request #71 from creativetimofficial/feature/v1.2.2
+    
+    Feature/v1.2.2
+
+[33mcommit e0db5bcf52db8c2180ee9880bf798a3e05ea7587[m
+Author: sajadevo <nawabisajadahmad@gmail.com>
+Date:   Fri Aug 26 12:11:50 2022 +0430
+
+    update to v1.2.2
+
+[33mcommit 35f9cb33e95509b8c793821ca50cfebbad68fcd5[m
+Merge: 96e53dc 80184a5
+Author: Sajad Ahmad Nawabi <nawabisajadahmad@gmail.com>
+Date:   Tue Jul 13 17:26:00 2021 +0430
+
+    Merge pull request #63 from creativetimofficial/dev-main
+    
+    Dev main
+
+[33mcommit 80184a507551fa6d1e8fdab257c7f353fd404e60[m
+Merge: 55650ec 5f6e645
+Author: Sajad Ahmad Nawabi <nawabisajadahmad@gmail.com>
+Date:   Tue Jul 13 15:08:13 2021 +0430
+
+    Merge pull request #62 from creativetimofficial/feature/v1.2.1
+    
+    Update the product to v1.2.1
+
+[33mcommit 5f6e64515979ffe4af7c88c1496a3ebe12608385[m
+Author: sajadevo <nawabisajadahmad@gmail.com>
+Date:   Tue Jul 13 12:23:43 2021 +0430
+
+    Update the product to v1.2.1
+
+[33mcommit 96e53dcf3a05a95ffc8ef92f68d92e0befcfffb2[m[33m ([m[1;33mtag: 1.2.0[m[33m)[m
+Merge: c6f80c6 55650ec
+Author: Nazare Emanuel-Ioan <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 16:31:37 2021 +0200
+
+    Merge pull request #52 from creativetimofficial/dev-main
+    
+    Feature: Update dependencies
+
+[33mcommit 55650ec7c8e5bf5389d3fd650767103b0a25e55d[m
+Merge: cc292af d087fe4
+Author: Nazare Emanuel-Ioan <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 16:23:40 2021 +0200
+
+    Merge pull request #51 from creativetimofficial/feature/v1.2.0
+    
+    Feature: Update dependencies
+
+[33mcommit d087fe45083546495c891fe014d3f982011821b4[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 16:11:44 2021 +0200
+
+    style: run build scss command
+
+[33mcommit b1a88789a7035e7dc0729445da3f3d14ae87c857[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 16:11:42 2021 +0200
+
+    style: run build scss command
+
+[33mcommit 0cb3532f06383094ac9542e3eb6a061bbf29cd5b[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 16:11:41 2021 +0200
+
+    style: run build scss command
+
+[33mcommit 1cb7b2e04124cf1f6535a969c6b0e16f3f26fa3d[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 16:00:51 2021 +0200
+
+    refactor: change relative with absolute imports
+
+[33mcommit 1fea40bc8cbb982739750199b79dcef717f952d2[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:19 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 8b813b8279e0799cd70c7dfef8f6c9a8dd9af0e7[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:17 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit d47946f035160765bceddc0b891893543e371a13[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:16 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 4338bd70fd35c31f9cafe28d144447d37210b641[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:14 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit beb4bab817eea748219781d032d9c00b768690be[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:12 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit df6d18cd32fb0cdffc90afe8b7e6e7940d96fa77[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:10 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 605c9f4df801cc09a73ab9d9c342f13b804f456b[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:08 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit afb513ad10460ecb4345ac2177926c704da900fc[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:06 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 5529187d59074a7c49e770e4ede9b86833431f34[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:04 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 6faea4dd4782b93bbb855a7103f6be8a56058f48[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:03 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 188abe4f73198c3072ed754ed438d56610296b70[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:49:01 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 0cfdd433193e2051159260799ea3bbb7e1a258fd[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:59 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 7851e9e832877646fedc5624ae8c964328fdf607[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:57 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 2c0f41b0ed95b599170df8e6f630e3f7ff66de7f[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:55 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 4cf5d88b9fe13b6508308d38b2dd7a3c3177d511[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:53 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 8d3aee63aaf3d4a0caab605a656aa9f2a7b90b79[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:52 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 65112a9fdfd136d0a96f7a65d6c6c49860fc7763[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:50 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit dc33f01f2ee4f67377f7c5fe31881832a2c3a78c[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:48 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit e813f91206a7a08ba3b56c642bcc1fe002f4bc00[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:46 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 6f54af9a46d9f043165e3e083bc05e925dd40302[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:44 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 87b2b175c49355d89ed48b41c4a3d3fa95a961ef[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:42 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 09b36aff0d20fd7febd8cbdc3c8929574913a096[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:41 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit aa8424aebad9270a8ee71516f9aaf6eaf6ce3187[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:39 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 443aace85cc28fb0553789f036f7ffc570730d4d[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:37 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 6b96e063cb69701fb11daa69943b281ded8a22c0[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:35 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit acc4224d7874c44dacbc3b56ac5bf1be2b61529b[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:33 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 15c53c5ea5e923c5387e57934b4eaf0ab0f7dc4f[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:31 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit bcc0f35c489886c2a4d8e5006bd2ee3fae60d371[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:48:30 2021 +0200
+
+    docs: change dates and version
+
+[33mcommit 0c52114868cecdf3c68a987242cd3fc5cd4aab0d[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:44:33 2021 +0200
+
+    docs: add changes
+
+[33mcommit 8d6894434d9553c4541e81a3deaad1dbb15f456b[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:40:11 2021 +0200
+
+    fix: solve scss issues
+
+[33mcommit 61b19e54e2d634f35269506c648b2414240ee179[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:40:09 2021 +0200
+
+    fix: solve scss issues
+
+[33mcommit 5427c91d7d9601866a0be9e2de828feaf61b8ab9[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:40:06 2021 +0200
+
+    fix: solve scss issues
+
+[33mcommit 726cb15d6948fd263dfed7e7aab018329e1cb730[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:29:18 2021 +0200
+
+    docs: add changes
+
+[33mcommit 4991183635d24481770010e5d4d86fd9d95f1384[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:29:13 2021 +0200
+
+    feature: add node-sass-importer
+
+[33mcommit 9c41447b993ac127f106d5da9c599d57270bd6a6[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:19 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit 31b6939187656c04c2620468818435759657d596[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:17 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit 6e542def178f80c27ccaacd4aded3d92dfad34b4[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:15 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit c5c0ac1039afca820624a073f775e9fa5f1396d3[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:14 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit 902a8d82a98a29bf85ff70a8421abdffdd5e1739[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:12 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit 46bc7cd88b5b9c6015f6f567b560feb2a92087fd[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:10 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit 565d7f8c84d99f66ec37bfcb446110dfff8c5ac0[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:08 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit a8f8a81c1e9e3278884ce64b7c323271bb0e4492[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:06 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one
+
+[33mcommit 4c5ae70846686f7c021a3e430fabaf62ef988f9d[m
+Author: EINazare <emanuelioannazare@gmail.com>
+Date:   Tue Jan 26 15:28:04 2021 +0200
+
+    refactor: change downloaded version of bs to node_modules one

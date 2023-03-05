@@ -45,7 +45,7 @@ import { database } from "variables/FirebaseConfig";
 import { auth } from "variables/FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 
-const Tables = () => {
+const Tables = (props) => {
   const [usdPurchase, setUsdPurchase] = useState();
   const [gbpPurchase, setGbpPurchase] = useState();
   const [btcPurchase, setBtcPurchase] = useState();
@@ -131,7 +131,7 @@ const Tables = () => {
         querySnapshot.forEach((doc) => ethArray.push(doc.data()));
         setEthPurchase(ethArray);
       } catch (error) {
-        console.log(error);
+        throw error;
       }
   };
 
@@ -151,8 +151,10 @@ const Tables = () => {
     getETHdata();
   }, [userID]);
 
-  const [usdLength, setUsdLength] = useState(2);
-  const [gbpLength, setGbpLength] = useState(2);
+  const [usdLength, setUsdLength] = useState(0);
+  const [gbpLength, setGbpLength] = useState(0);
+  const [btcLength, setBtcLength] = useState(0);
+  const [ethLength, setEthLength] = useState(0);
 
   return (
     <>
@@ -193,7 +195,8 @@ const Tables = () => {
                                 <img
                                   alt="..."
                                   src={photoUrl}
-                                  className="avatar rounded-circle mr-3"
+                                  width="30px"
+                                  className=" rounded-circle mr-3"
                                 />
 
                                 <Media>
@@ -231,10 +234,10 @@ const Tables = () => {
                     )}
                   </tbody>
                 </Table>{" "}
-                {usdPurchase.length > 2 ? (
+                {usdPurchase.length > 0 ? (
                   <CardFooter className="py-4">
                     <nav aria-label="...">
-                      {usdLength === 2 ? (
+                      {usdLength === 0 ? (
                         <Button
                           className="ms-auto"
                           onClick={() => setUsdLength(usdPurchase.length)}
@@ -244,7 +247,7 @@ const Tables = () => {
                       ) : (
                         <Button
                           className="btn-danger"
-                          onClick={() => setUsdLength(2)}
+                          onClick={() => setUsdLength(0)}
                         >
                           Hide Transactions
                         </Button>
@@ -254,7 +257,7 @@ const Tables = () => {
                 ) : null}
               </Card>
             ) : (
-              <Button>Buy USD</Button>
+              ""
             )}
           </div>
         </Row>
@@ -298,7 +301,8 @@ const Tables = () => {
                                 <img
                                   alt="..."
                                   src={photoUrl}
-                                  className="avatar rounded-circle mr-3"
+                                  width="30px"
+                                  className=" rounded-circle mr-3"
                                 />
 
                                 <Media>
@@ -336,10 +340,10 @@ const Tables = () => {
                     )}
                   </tbody>
                 </Table>{" "}
-                {gbpPurchase.length > 2 ? (
+                {gbpPurchase.length > 0 ? (
                   <CardFooter className="py-4">
                     <nav aria-label="...">
-                      {gbpLength === 2 ? (
+                      {gbpLength === 0 ? (
                         <Button
                           className="ms-auto"
                           onClick={() => setGbpLength(gbpPurchase.length)}
@@ -349,7 +353,7 @@ const Tables = () => {
                       ) : (
                         <Button
                           className="btn-danger"
-                          onClick={() => setGbpLength(2)}
+                          onClick={() => setGbpLength(0)}
                         >
                           Hide Transactions
                         </Button>
@@ -359,7 +363,217 @@ const Tables = () => {
                 ) : null}
               </Card>
             ) : (
-              <Button className="btn-dark">Buy GBP</Button>
+              ""
+            )}
+          </div>
+        </Row>
+        <Row className="mt-5">
+          <div className="col">
+            {btcPurchase ? (
+              <Card className="shadow">
+                <CardHeader className="border-0  ">
+                  <h3 className="mb-0 text-dark">Bitcoin Purchased History</h3>
+                </CardHeader>{" "}
+                <Table className="align-items-center table-flush" responsive>
+                  <thead className="thead-light ">
+                    <tr>
+                      <th scope="col" className="text-dark">
+                        Name
+                      </th>
+                      <th scope="col" className="text-dark">
+                        Purchase
+                      </th>
+                      <th scope="col" className="text-dark">
+                        Recieved
+                      </th>
+                      <th scope="col" className="text-dark">
+                        Date
+                      </th>
+                      <th scope="col" className="text-dark">
+                        Phone
+                      </th>
+                      <th scope="col" className="text-dark" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {btcPurchase ? (
+                      btcPurchase.map((eachPurchase, index) => {
+                        return index <= btcLength ? (
+                          <tr>
+                            <th scope="row" className="text-dark">
+                              <Media className="align-items-center">
+                                <img
+                                  alt="..."
+                                  src={photoUrl}
+                                  width="30px"
+                                  className=" rounded-circle mr-3"
+                                />
+
+                                <Media>
+                                  <span className="mb-0 text-sm">
+                                    {eachPurchase.Name}
+                                  </span>
+                                </Media>
+                              </Media>
+                            </th>
+                            <td className="text-dark">
+                              <Badge color="" className="badge-dot mr-4">
+                                <i className="bg-danger" />
+                                {eachPurchase.Amount} GHS{" "}
+                              </Badge>
+                            </td>
+                            <td className="text-dark">
+                              <Badge color="" className="badge-dot mr-4">
+                                <i className="bg-success" />
+                                {eachPurchase.Recieved} USD{" "}
+                              </Badge>
+                            </td>
+                            <td className="text-dark">{eachPurchase.date}</td>
+                            <td className="text-dark">{eachPurchase.phone}</td>
+                          </tr>
+                        ) : (
+                          ""
+                        );
+                      })
+                    ) : (
+                      <div className="p-4 d-flex w-100 mx-auto text-center justify-content-center">
+                        <div class="spinner-grow text-danger" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                    )}
+                  </tbody>
+                </Table>{" "}
+                {btcPurchase.length > 0 ? (
+                  <CardFooter className="py-4">
+                    <nav aria-label="...">
+                      {btcLength === 2 ? (
+                        <Button
+                          className="ms-auto"
+                          onClick={() => setBtcLength(btcPurchase.length)}
+                        >
+                          View All Transactions
+                        </Button>
+                      ) : (
+                        <Button
+                          className="btn-danger"
+                          onClick={() => setBtcLength(0)}
+                        >
+                          Hide Transactions
+                        </Button>
+                      )}
+                    </nav>
+                  </CardFooter>
+                ) : null}
+              </Card>
+            ) : (
+              ""
+            )}
+          </div>
+        </Row>
+        <Row className="mt-5">
+          <div className="col">
+            {ethPurchase ? (
+              <Card className="shadow bg-dark">
+                <CardHeader className="border-0 bg-dark ">
+                  <h3 className="mb-0 text-light">
+                    Ethereum Purchased History
+                  </h3>
+                </CardHeader>{" "}
+                <Table className="align-items-center table-flush" responsive>
+                  <thead className="thead-dark ">
+                    <tr>
+                      <th scope="col" className="text-light">
+                        Name
+                      </th>
+                      <th scope="col" className="text-light">
+                        Purchase
+                      </th>
+                      <th scope="col" className="text-light">
+                        Recieved
+                      </th>
+                      <th scope="col" className="text-light">
+                        Date
+                      </th>
+                      <th scope="col" className="text-light">
+                        Phone
+                      </th>
+                      <th scope="col" className="text-light" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ethPurchase ? (
+                      ethPurchase.map((eachPurchase, index) => {
+                        return index <= ethLength ? (
+                          <tr>
+                            <th scope="row" className="text-light">
+                              <Media className="align-items-center">
+                                <img
+                                  alt="..."
+                                  src={photoUrl}
+                                  width="30px"
+                                  className=" rounded-circle mr-3"
+                                />
+
+                                <Media>
+                                  <span className="mb-0 text-sm">
+                                    {eachPurchase.Name}
+                                  </span>
+                                </Media>
+                              </Media>
+                            </th>
+                            <td className="text-light">
+                              <Badge color="" className="badge-dot mr-4">
+                                <i className="bg-danger" />
+                                {eachPurchase.Amount} GHS{" "}
+                              </Badge>
+                            </td>
+                            <td className="text-light">
+                              <Badge color="" className="badge-dot mr-4">
+                                <i className="bg-success" />
+                                {eachPurchase.Recieved} USD{" "}
+                              </Badge>
+                            </td>
+                            <td className="text-light">{eachPurchase.date}</td>
+                            <td className="text-light">{eachPurchase.phone}</td>
+                          </tr>
+                        ) : (
+                          ""
+                        );
+                      })
+                    ) : (
+                      <div className="p-4 d-flex w-100 mx-auto text-center justify-content-center">
+                        <div class="spinner-grow text-danger" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                    )}
+                  </tbody>
+                </Table>{" "}
+                {ethPurchase.length > 0 ? (
+                  <CardFooter className="py-4">
+                    <nav aria-label="...">
+                      {ethLength === 0 ? (
+                        <Button
+                          className="ms-auto"
+                          onClick={() => setEthLength(ethPurchase.length)}
+                        >
+                          View All Transactions
+                        </Button>
+                      ) : (
+                        <Button
+                          className="btn-danger"
+                          onClick={() => setEthLength(0)}
+                        >
+                          Hide Transactions
+                        </Button>
+                      )}
+                    </nav>
+                  </CardFooter>
+                ) : null}
+              </Card>
+            ) : (
+              ""
             )}
           </div>
         </Row>

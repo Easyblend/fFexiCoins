@@ -253,7 +253,7 @@ const Admin = (props) => {
               {...props}
               brandText={getBrandText(props.location.pathname)}
             />
-            <Switch>
+            <Switch setModal2={setModal2} setModal={setModal}>
               {getRoutes(routes)}
 
               <Redirect from="*" to="/admin/index" />

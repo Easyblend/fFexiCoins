@@ -69,6 +69,7 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
         options
       );
       const data = await response.json();
+
       setDollarRate(data.new_amount);
     } catch (error) {
       toast.info("Network error");
@@ -88,10 +89,41 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
     }
   };
 
+  const [btcRate, setBtcRate] = useState(0);
+
+  const getBtcRate = async () => {
+    try {
+      const response = await fetch(
+        "https://api.coingecko.com/api/v3/coins/bitcoin"
+      );
+      const data = await response.json();
+      setBtcRate(data.market_data.current_price.usd); //btc price in dollars
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const [ethRate, setEthRate] = useState(0);
+  const getEthRate = async () => {
+    try {
+      const response = await fetch(
+        "https://api.coingecko.com/api/v3/coins/ethereum"
+      );
+      const data = await response.json();
+      setEthRate(data.market_data.current_price.usd); //btc price in dollars
+    } catch (error) {
+      throw error;
+    }
+  };
+
   useEffect(() => {
     getDollarRate();
     getGbpRate();
+    getBtcRate();
+    getEthRate();
   });
+
+  console.log(dollarRate);
 
   return (
     <>
@@ -132,8 +164,9 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                       <span className="text-success mr-2">
                         <i className="fa fa-arrow-up" /> Valued at
                       </span>{" "}
-                      <span className="text-nowrap h4">
-                        {(usdtotal / dollarRate).toFixed(2)} GHC
+                      <span className="text-nowrap h4 text-muted">
+                        {usdtotal ? (usdtotal / dollarRate).toFixed(2) : "0.00"}{" "}
+                        GHC
                       </span>
                     </p>
                   </CardBody>
@@ -171,9 +204,12 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                       <span className="text-success mr-2">
                         <i className="fas fa-arrow-up" /> Valued at
                       </span>{" "}
-                      <span className="text-nowrap h4">
+                      <span className="text-nowrap h4 text-muted">
                         {" "}
-                        {(gbptotal / gbpRate).toFixed(2)} GHC
+                        {gbptotal
+                          ? (gbptotal / gbpRate).toFixed(2)
+                          : "0.00"}{" "}
+                        GHC
                       </span>
                     </p>
                   </CardBody>
@@ -213,9 +249,15 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-success mr-2">
-                        <i className="fas fa-arrow-up" /> Status
+                        <i className="fas fa-arrow-up" /> Valued at
                       </span>{" "}
-                      <span className="text-nowrap">High Demand</span>
+                      <span className="text-nowrap text-muted h4">
+                        {" "}
+                        {btctotal
+                          ? ((btctotal * btcRate) / dollarRate).toFixed(2)
+                          : "0.00"}{" "}
+                        GHC
+                      </span>
                     </p>
                   </CardBody>
                 </Card>
@@ -251,9 +293,14 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-success mr-2">
-                        <i className="fas fa-arrow-up" /> Status
+                        <i className="fas fa-arrow-up" /> Valued at
                       </span>{" "}
-                      <span className="text-nowrap">High Demand</span>
+                      <span className="text-nowrap text-muted h4">
+                        {ethtotal
+                          ? ((ethRate * ethtotal) / dollarRate).toFixed(2)
+                          : "0.00"}{" "}
+                        GHC
+                      </span>
                     </p>
                   </CardBody>
                 </Card>
