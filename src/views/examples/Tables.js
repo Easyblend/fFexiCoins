@@ -234,7 +234,7 @@ const Tables = (props) => {
                     )}
                   </tbody>
                 </Table>{" "}
-                {usdPurchase.length > 0 ? (
+                {usdPurchase.length > 1 ? (
                   <CardFooter className="py-4">
                     <nav aria-label="...">
                       {usdLength === 0 ? (
@@ -340,7 +340,7 @@ const Tables = (props) => {
                     )}
                   </tbody>
                 </Table>{" "}
-                {gbpPurchase.length > 0 ? (
+                {gbpPurchase.length > 1 ? (
                   <CardFooter className="py-4">
                     <nav aria-label="...">
                       {gbpLength === 0 ? (
@@ -444,10 +444,10 @@ const Tables = (props) => {
                     )}
                   </tbody>
                 </Table>{" "}
-                {btcPurchase.length > 0 ? (
+                {btcPurchase.length > 1 ? (
                   <CardFooter className="py-4">
                     <nav aria-label="...">
-                      {btcLength === 2 ? (
+                      {btcLength === 0 ? (
                         <Button
                           className="ms-auto"
                           onClick={() => setBtcLength(btcPurchase.length)}
@@ -550,7 +550,7 @@ const Tables = (props) => {
                     )}
                   </tbody>
                 </Table>{" "}
-                {ethPurchase.length > 0 ? (
+                {ethPurchase.length > 1 ? (
                   <CardFooter className="py-4">
                     <nav aria-label="...">
                       {ethLength === 0 ? (
