@@ -266,7 +266,7 @@ const Tables = (props) => {
         <Row className="mt-5">
           <div className="col">
             {gbpPurchase ? (
-              <Card className="shadow bg-dark">
+              <Card className="shadow bg-dark border-0">
                 <CardHeader className=" bg-dark ">
                   <h3 className="mb-0 text-light">GBP Purchased History</h3>
                 </CardHeader>{" "}
@@ -474,7 +474,7 @@ const Tables = (props) => {
         <Row className="mt-5">
           <div className="col">
             {ethPurchase ? (
-              <Card className="shadow bg-dark">
+              <Card className="shadow bg-dark border-0">
                 <CardHeader className="border-0 bg-dark ">
                   <h3 className="mb-0 text-light">
                     Ethereum Purchased History
