@@ -426,10 +426,15 @@ const UsdwithdrawForm = ({ usdBalance, dollarRate }) => {
             </FormGroup>
           </Form>
         </Col>
-        <Col className="text-right my-4 shadow-lg px-3">
-          <h1 className="display-1">
-            $ {(usdBalance.toFixed(2) - widthrawAmount * dollarRate).toFixed(2)}
-          </h1>
+        <Col className=" my-4 shadow-lg px-3">
+          <div className="d-flex justify-content-between">
+            <h1 className="display-1">
+              ${" "}
+              {(usdBalance.toFixed(2) - widthrawAmount * dollarRate).toFixed(2)}
+            </h1>
+            <h1 className="display-1">USD</h1>
+          </div>
+
           <div className="d-flex justify-content-between">
             {" "}
             <h4 className="text-left">Balance</h4>

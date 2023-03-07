@@ -267,7 +267,7 @@ const Tables = (props) => {
           <div className="col">
             {gbpPurchase ? (
               <Card className="shadow bg-dark">
-                <CardHeader className="border-0 bg-dark ">
+                <CardHeader className=" bg-dark ">
                   <h3 className="mb-0 text-light">GBP Purchased History</h3>
                 </CardHeader>{" "}
                 <Table className="align-items-center table-flush" responsive>
