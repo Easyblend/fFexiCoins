@@ -165,7 +165,7 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
                         <i className="fa fa-arrow-up" /> Valued at
                       </span>{" "}
                       <span className="text-nowrap h4 text-muted">
-                        {usdtotal ? (usdtotal / dollarRate).toFixed(2) : "0.00"}{" "}
+                        {usdtotal ? (usdtotal / dollarRate).toFixed() : "0.00"}{" "}
                         GHC
                       </span>
                     </p>

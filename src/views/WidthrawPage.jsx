@@ -22,14 +22,16 @@ import {
   DropdownMenu,
   NavbarBrand,
 } from "reactstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import { Link } from "react-router-dom";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "variables/FirebaseConfig";
 import { useNavigate } from "react-router-dom-v5-compat";
 import { toast } from "react-toastify";
 import Logo from "../assets/img/brand/fotor_2023-1-25_16_1_8.png";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { database } from "variables/FirebaseConfig";
 
 const WidthrawPage = () => {
   const [usdWithdrawal, setUsdWithdrawal] = useState(false);
@@ -37,13 +39,80 @@ const WidthrawPage = () => {
   const [btcWithdrawal, setBtcWithdrawal] = useState(false);
   const [ethWithdrawal, setEthWithdrawal] = useState(false);
 
-  const [selectedUI, setSelectedUI] = useState("shadow-lg ");
+  const [selectedUI, setSelectedUI] = useState("shadow-lg bg-secondary");
 
   const [photoUrl, setPhotoUrl] = useState(
     "https://www.grovenetworks.com/images/easyblog_shared/July_2018/7-4-18/b2ap3_large_totw_network_profile_400.jpg"
   );
 
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": process.env.REACT_APP_CURRENCY_API,
+      "X-RapidAPI-Host": "currency-converter-by-api-ninjas.p.rapidapi.com",
+    },
+  };
+
+  //Getting the current Dollar price in USD
+  const [dollarRate, setDollarRate] = useState(0);
+
+  const getDollarRate = async () => {
+    try {
+      const response = await fetch(
+        "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=GHS&want=USD&amount=1",
+        options
+      );
+      const data = await response.json();
+      setDollarRate(data.new_amount);
+      console.log(data.new_amount);
+    } catch (error) {
+      toast.info(
+        "Coundln't get current exchange rate, please check you connection"
+      );
+    }
+  };
+
+  const [usdBalance, setUsdBalance] = useState(0);
+
+  const [userID, setUserID] = useState();
+  const getUser = () => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUserID(currentUser.uid);
+        if (currentUser.photoURL) {
+          setPhotoUrl(currentUser.photoURL);
+        }
+      }
+    });
+  };
+
+  const getUSDBalance = async () => {
+    console.log(userID);
+    try {
+      if (userID) {
+        let usdTotal = 0;
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "USD")
+        );
+        querySnapshot.forEach(
+          (doc) => (usdTotal += Number(doc.data().Recieved))
+        );
+        setUsdBalance(usdTotal);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const navigate = useNavigate();
+
+  console.log(usdBalance);
+
+  useEffect(getUser, []);
+
+  useEffect(() => {
+    getUSDBalance();
+    getDollarRate();
+  });
 
   return (
     <div className="pb-3">
@@ -53,7 +122,7 @@ const WidthrawPage = () => {
       >
         <NavbarBrand className="pt-0">
           {/* <img src="" alt="logo" /> */}
-          <img src={Logo} alt="Missing" width="50px" height="auto" />{" "}
+          <img src={Logo} alt="Missing" width="40px" height="auto" />{" "}
           <span className="ml-2 text-dark h2 d-none d-md-inline">
             FlexiCoins
           </span>
@@ -102,7 +171,7 @@ const WidthrawPage = () => {
             fluid
             className="px-4 px-sm-6"
             onClick={() => {
-              document.getElementById("wid  thdraw").scrollIntoView();
+              document.getElementById("widthdraw").scrollIntoView();
             }}
           >
             <div className="header-body">
@@ -130,7 +199,7 @@ const WidthrawPage = () => {
                             USD
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            12.30 $
+                            {usdBalance.toFixed(2)} $
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -139,11 +208,15 @@ const WidthrawPage = () => {
                           </div>
                         </Col>
                       </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-success mr-2">
-                          <i className="fa fa-arrow-up" /> 3.48%
+                      <p className="mt-3 mb-0  text-sm">
+                        <span className="text-danger fw-bold h4 mr-2">
+                          GH&#8373;{" "}
+                          {(
+                            (usdBalance - (20 / 100) * usdBalance) /
+                            dollarRate
+                          ).toFixed(2)}
                         </span>{" "}
-                        <span className="text-nowrap">Since last month</span>
+                        <span className="text-nowrap">Withdrawable</span>
                       </p>
                     </CardBody>
                   </Card>
@@ -272,7 +345,7 @@ const WidthrawPage = () => {
             All withdrawals will take between 24 - 48 hours to be processed.
             please be patient while we process your requests
           </p>
-          <WithdrawForm />
+          <UsdwithdrawForm />
           <Container className="mt-5">
             <h2>Recent Transactions</h2>
             <Table>
@@ -301,10 +374,60 @@ const WidthrawPage = () => {
 
 export default WidthrawPage;
 
-const WithdrawForm = () => {
+const UsdwithdrawForm = () => {
   return (
     <Container className="mt-7 flex-wrap-reverse" id="widthdraw">
       <h4 className="text-center">USD Withdrawal</h4>
+      <Row className="flex-wrap-reverse">
+        <Col sm="7">
+          <Form>
+            <FormGroup>
+              <Label htmlFor="phone">Phone number</Label>
+              <InputGroup className="input-group-alternative">
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <i class="fa-solid fa-phone"></i>
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input placeholder="+233" id="phone" type="text" />
+              </InputGroup>
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="phone">Amount in &#8373;</Label>
+              <InputGroup className="input-group-alternative">
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <i class="fa-solid fa-money-check-dollar"></i>
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input placeholder="GHS 0.00" type="number" />
+              </InputGroup>
+            </FormGroup>
+          </Form>
+        </Col>
+        <Col className="text-right my-4 shadow-lg px-3">
+          <h1 className="display-1">$ 12,893.01</h1>
+          <h4 className="text-left">Balance</h4>
+        </Col>
+      </Row>
+      <p className="text-center">
+        Please take note of the 3% widthrawal charges with an extra 1.5% e-levy
+        tax deductions. <br />
+        If you have questions do ask us{" "}
+        <a
+          href="mailto:support@flexicoins.com"
+          className="fw-bold bg-dark p-1 rounded px-2 text-light mx-2 fw-bold"
+        >
+          Here
+        </a>
+      </p>
+    </Container>
+  );
+};
+const GbpwithdrawForm = () => {
+  return (
+    <Container className="mt-7 flex-wrap-reverse" id="widthdraw">
+      <h4 className="text-center">GBP Withdrawal</h4>
       <Row className="flex-wrap-reverse">
         <Col sm="7">
           <Form>
