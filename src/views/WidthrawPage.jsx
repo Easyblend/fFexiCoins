@@ -345,9 +345,14 @@ const WidthrawPage = () => {
             All withdrawals will take between 24 - 48 hours to be processed.
             please be patient while we process your requests
           </p>
-          <UsdwithdrawForm />
+          {usdWithdrawal ? (
+            <UsdwithdrawForm usdBalance={usdBalance} dollarRate={dollarRate} />
+          ) : (
+            ""
+          )}
+
           <Container className="mt-5">
-            <h2>Recent Transactions</h2>
+            <h2>Recent Widthrawals</h2>
             <Table>
               <tr>
                 <th>Transactions ID</th>
@@ -374,7 +379,18 @@ const WidthrawPage = () => {
 
 export default WidthrawPage;
 
-const UsdwithdrawForm = () => {
+const UsdwithdrawForm = ({ usdBalance, dollarRate }) => {
+  const [usdGhcBalance, setUsdGhcBalance] = useState(0);
+
+  const dollar_to_cedis = (
+    (usdBalance - (20 / 100) * usdBalance) /
+    dollarRate
+  ).toFixed(2);
+
+  useEffect(() => setUsdGhcBalance(dollar_to_cedis), [usdBalance]);
+
+  const [widthrawAmount, setWithdrawAmount] = useState(0);
+
   return (
     <Container className="mt-7 flex-wrap-reverse" id="widthdraw">
       <h4 className="text-center">USD Withdrawal</h4>
@@ -400,14 +416,28 @@ const UsdwithdrawForm = () => {
                     <i class="fa-solid fa-money-check-dollar"></i>
                   </InputGroupText>
                 </InputGroupAddon>
-                <Input placeholder="GHS 0.00" type="number" />
+                <Input
+                  placeholder="GHS 0.00"
+                  type="number"
+                  value={widthrawAmount}
+                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                />
               </InputGroup>
             </FormGroup>
           </Form>
         </Col>
         <Col className="text-right my-4 shadow-lg px-3">
-          <h1 className="display-1">$ 12,893.01</h1>
-          <h4 className="text-left">Balance</h4>
+          <h1 className="display-1">
+            $ {(usdBalance.toFixed(2) - widthrawAmount * dollarRate).toFixed(2)}
+          </h1>
+          <div className="d-flex justify-content-between">
+            {" "}
+            <h4 className="text-left">Balance</h4>
+            <h4 className="text-danger">
+              {" "}
+              GH&#8373; {(usdGhcBalance - widthrawAmount).toFixed(2)}
+            </h4>
+          </div>
         </Col>
       </Row>
       <p className="text-center">
