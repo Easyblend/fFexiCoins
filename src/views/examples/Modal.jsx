@@ -26,9 +26,7 @@ const Modal = ({
 
   const navigate = useNavigate();
 
-  const usdMsg = useContext(CurrencyRatesContext);
-
-  console.log(usdMsg.gbpRate);
+  const CurrencyRate = useContext(CurrencyRatesContext);
 
   const date = new Intl.DateTimeFormat("en-US", {
     month: "long",
@@ -44,6 +42,8 @@ const Modal = ({
   const [phone, setPhone] = useState("");
   const [recieve, setRecieve] = useState(0);
 
+  const [rate, setRate] = useState();
+
   const [currencyType, setCurrencyType] = useState("USD");
 
   const SendData = async (e) => {
@@ -52,9 +52,12 @@ const Modal = ({
     if (currencyType === "USD") {
       const price = Number(dollarRate * purchasingAmount).toFixed(2);
       setRecieve(price);
+
+      setRate(CurrencyRate.dollarRate);
     } else {
       const price = Number(poundRate * purchasingAmount).toFixed(2);
       setRecieve(price);
+      setRate(CurrencyRate.gbpRate);
     }
 
     if (recieve) {
@@ -78,6 +81,7 @@ const Modal = ({
                     Amount: purchasingAmount,
                     Recieved: recieve,
                     what_Purchased: currencyType,
+                    Exchange_Rate: rate,
                     date: date,
                     dateInitial: day + " " + date.slice(0, 3),
                     phone: phone,

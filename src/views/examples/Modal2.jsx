@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "reactstrap";
 import { collection, addDoc } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 //importing paystack
 import PaystackPop from "@paystack/inline-js";
 import { useNavigate } from "react-router-dom-v5-compat";
+import { CurrencyRatesContext } from "Utils/CurrencyRatesContext";
 
 const Modal2 = ({
   setModal2,
@@ -25,6 +26,8 @@ const Modal2 = ({
   // };
 
   const navigate = useNavigate();
+
+  const CurrencyRate = useContext(CurrencyRatesContext);
 
   const date = new Intl.DateTimeFormat("en-US", {
     month: "long",
