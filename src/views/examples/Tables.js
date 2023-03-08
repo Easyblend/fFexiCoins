@@ -74,7 +74,6 @@ const Tables = (props) => {
   });
 
   const getUSDData = async () => {
-    console.log(userID);
     try {
       if (userID) {
         const usdArray = [];

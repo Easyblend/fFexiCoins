@@ -64,7 +64,6 @@ const WidthrawPage = () => {
       );
       const data = await response.json();
       setDollarRate(data.new_amount);
-      console.log(data.new_amount);
     } catch (error) {
       toast.info(
         "Coundln't get current exchange rate, please check you connection"
@@ -87,7 +86,6 @@ const WidthrawPage = () => {
   };
 
   const getUSDBalance = async () => {
-    console.log(userID);
     try {
       if (userID) {
         let usdTotal = 0;
@@ -104,8 +102,6 @@ const WidthrawPage = () => {
     }
   };
   const navigate = useNavigate();
-
-  console.log(usdBalance);
 
   useEffect(getUser, []);
 
@@ -424,9 +420,12 @@ const UsdwithdrawForm = ({ usdBalance, dollarRate }) => {
                 />
               </InputGroup>
             </FormGroup>
+            <Button className="btn-success mx-auto text-center  justify-content-center d-sm-inline d-flex">
+              Widthdraw
+            </Button>
           </Form>
         </Col>
-        <Col className=" my-4 shadow-lg px-3">
+        <Col className=" my-4   shadow-lg px-3">
           <div className="d-flex justify-content-between">
             <h1 className="display-1">
               ${" "}
@@ -445,7 +444,7 @@ const UsdwithdrawForm = ({ usdBalance, dollarRate }) => {
           </div>
         </Col>
       </Row>
-      <p className="text-center">
+      <p className="text-center mt-5">
         Please take note of the 3% widthrawal charges with an extra 1.5% e-levy
         tax deductions. <br />
         If you have questions do ask us{" "}

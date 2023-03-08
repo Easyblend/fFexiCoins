@@ -20,56 +20,16 @@ import ReactDOM from "react-dom/client";
 
 import "react-toastify/dist/ReactToastify.css";
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { CompatRouter } from "react-router-dom-v5-compat";
-
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
-import AdminLayout from "layouts/Admin.js";
-import AuthLayout from "layouts/Auth.js";
-import DepositPage from "views/DepositPage";
-import WidthrawPage from "views/WidthrawPage";
-
-//Toast imports
-import { ToastContainer } from "react-toastify";
-import PasswordReset from "views/examples/ResetPassword";
+import App from "components/App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <>
-    <BrowserRouter>
-      <CompatRouter>
-        <Switch>
-          <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-
-          <Route
-            path="/withdraw"
-            render={(props) => <WidthrawPage {...props} />}
-          />
-          <Route
-            path="/auth/resetpassword"
-            render={(props) => <PasswordReset {...props} />}
-          />
-
-          <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-          <Redirect from="/" to="/admin/index" />
-        </Switch>
-      </CompatRouter>
-    </BrowserRouter>
-    <ToastContainer
-      position="top-center"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      limit={1}
-      draggable
-      theme="dark"
-    />
-    {/* Same as */}
+    <App />
   </>
 );
