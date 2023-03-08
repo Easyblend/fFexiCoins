@@ -45,6 +45,8 @@ const Modal2 = ({
 
   const [currencyType, setCurrencyType] = useState("BTC");
 
+  const [rate, setRate] = useState();
+
   const SendData = async (e) => {
     e.preventDefault();
 
@@ -53,11 +55,13 @@ const Modal2 = ({
         5
       );
       setRecieve(price);
+      setRate(CurrencyRate.btcRate);
     } else {
       const price = Number((purchasingAmount / ethRate) * dollarRate).toFixed(
         5
       );
       setRecieve(price);
+      setRate(CurrencyRate.ethRate);
     }
 
     if (recieve) {
@@ -82,6 +86,7 @@ const Modal2 = ({
                     Amount: purchasingAmount,
                     Recieved: recieve,
                     what_Purchased: currencyType,
+                    Exchange_Rate: rate,
                     date: date,
                     dateInitial: day + " " + date.slice(0, 3),
                     phone: phone,
