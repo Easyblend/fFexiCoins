@@ -46,14 +46,6 @@ const WidthrawPage = () => {
     "https://www.grovenetworks.com/images/easyblog_shared/July_2018/7-4-18/b2ap3_large_totw_network_profile_400.jpg"
   );
 
-  const options = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.REACT_APP_CURRENCY_API,
-      "X-RapidAPI-Host": "currency-converter-by-api-ninjas.p.rapidapi.com",
-    },
-  };
-
   //Getting the current Dollar price in USD
   const { dollarRate, ethRate, gbpRate, btcRate } =
     useContext(CurrencyRatesContext);
