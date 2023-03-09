@@ -22,7 +22,7 @@ import {
   DropdownMenu,
   NavbarBrand,
 } from "reactstrap";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import { Link } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -32,6 +32,7 @@ import { toast } from "react-toastify";
 import Logo from "../assets/img/brand/fotor_2023-1-25_16_1_8.png";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { database } from "variables/FirebaseConfig";
+import { CurrencyRatesContext } from "Utils/CurrencyRatesContext";
 
 const WidthrawPage = () => {
   const [usdWithdrawal, setUsdWithdrawal] = useState(false);
@@ -54,22 +55,8 @@ const WidthrawPage = () => {
   };
 
   //Getting the current Dollar price in USD
-  const [dollarRate, setDollarRate] = useState(0);
-
-  const getDollarRate = async () => {
-    try {
-      const response = await fetch(
-        "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=GHS&want=USD&amount=1",
-        options
-      );
-      const data = await response.json();
-      setDollarRate(data.new_amount);
-    } catch (error) {
-      toast.info(
-        "Coundln't get current exchange rate, please check you connection"
-      );
-    }
-  };
+  const { dollarRate, ethRate, gbpRate, btcRate } =
+    useContext(CurrencyRatesContext);
 
   const [usdBalance, setUsdBalance] = useState(0);
 
@@ -107,7 +94,6 @@ const WidthrawPage = () => {
 
   useEffect(() => {
     getUSDBalance();
-    getDollarRate();
   });
 
   return (
