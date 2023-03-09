@@ -17,9 +17,10 @@
 */
 
 // reactstrap components
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import { CurrencyRatesContext } from "Utils/CurrencyRatesContext";
 
 const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
   const [usdtotal, setUsdTotal] = useState();
@@ -53,77 +54,8 @@ const Header = ({ usdPurchase, gpbPurchase, btcPurchase, ethPurchase }) => {
     setEthTotal(ethTotals);
   });
 
-  const options = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.REACT_APP_CURRENCY_API,
-      "X-RapidAPI-Host": "currency-converter-by-api-ninjas.p.rapidapi.com",
-    },
-  };
-
-  const [dollarRate, setDollarRate] = useState(0);
-  const getDollarRate = async () => {
-    try {
-      const response = await fetch(
-        "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=GHS&want=USD&amount=1",
-        options
-      );
-      const data = await response.json();
-
-      setDollarRate(data.new_amount);
-    } catch (error) {
-      toast.info("Network error");
-    }
-  };
-  const [gbpRate, setGbpRate] = useState(0);
-  const getGbpRate = async () => {
-    try {
-      const response = await fetch(
-        "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=GHS&want=GBP&amount=1",
-        options
-      );
-      const data = await response.json();
-      setGbpRate(data.new_amount);
-    } catch (error) {
-      toast.info("Network error");
-    }
-  };
-
-  const [btcRate, setBtcRate] = useState(0);
-
-  const getBtcRate = async () => {
-    try {
-      const response = await fetch(
-        "https://api.coingecko.com/api/v3/coins/bitcoin"
-      );
-      const data = await response.json();
-      setBtcRate(data.market_data.current_price.usd); //btc price in dollars
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const [ethRate, setEthRate] = useState(0);
-  const getEthRate = async () => {
-    try {
-      const response = await fetch(
-        "https://api.coingecko.com/api/v3/coins/ethereum"
-      );
-      const data = await response.json();
-      setEthRate(data.market_data.current_price.usd); //btc price in dollars
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  useEffect(() => {
-    getDollarRate();
-    getGbpRate();
-    getBtcRate();
-    getEthRate();
-  });
-
-  console.log(dollarRate);
+  const { dollarRate, gbpRate, btcRate, ethRate } =
+    useContext(CurrencyRatesContext);
 
   return (
     <>
