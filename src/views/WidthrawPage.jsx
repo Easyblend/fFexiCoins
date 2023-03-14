@@ -216,7 +216,7 @@ const WidthrawPage = () => {
                     setGbpWithdrawal(false);
                   }}
                 >
-                  <Card className="card-stats mb-4 mb-xl-0">
+                  <Card className="card-stats mb-4 mb-xl-0" type="button">
                     <CardBody className={usdWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
@@ -259,7 +259,7 @@ const WidthrawPage = () => {
                     setGbpWithdrawal(true);
                   }}
                 >
-                  <Card className="card-stats mb-4 mb-xl-0">
+                  <Card className="card-stats mb-4 mb-xl-0" type="button">
                     <CardBody className={gbpWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
@@ -298,7 +298,7 @@ const WidthrawPage = () => {
                     setGbpWithdrawal(false);
                   }}
                 >
-                  <Card className="card-stats mb-4 mb-xl-0">
+                  <Card className="card-stats mb-4 mb-xl-0" type="button">
                     <CardBody className={btcWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
@@ -337,7 +337,7 @@ const WidthrawPage = () => {
                     setGbpWithdrawal(false);
                   }}
                 >
-                  <Card className="card-stats mb-4 mb-xl-0">
+                  <Card className="card-stats mb-4 mb-xl-0" type="button">
                     <CardBody className={ethWithdrawal ? selectedUI : null}>
                       <Row>
                         <div className="col">
@@ -640,10 +640,10 @@ const BtcwithdrawForm = ({ btcBalance, btcRate, usdRate }) => {
         </Col>
         <Col className=" my-4   shadow-lg px-3 h-auto">
           <div className="d-flex justify-content-between">
-            <h1 className="display-3">
+            <h1 className="display-1">
               $ {(btcBalance - (widthrawAmount * usdRate) / btcRate).toFixed(4)}
             </h1>
-            <h1 className="display-3">BTC</h1>
+            <h1 className="display-1">BTC</h1>
           </div>
 
           <div className="d-flex justify-content-between">
@@ -722,10 +722,10 @@ const EthwithdrawForm = ({ btcBalance, btcRate, usdRate }) => {
         </Col>
         <Col className=" my-4   shadow-lg px-3 h-auto">
           <div className="d-flex justify-content-between">
-            <h1 className="display-3">
+            <h1 className="display-1">
               $ {(btcBalance - (widthrawAmount * usdRate) / btcRate).toFixed(4)}
             </h1>
-            <h1 className="display-3">BTC</h1>
+            <h1 className="display-1">BTC</h1>
           </div>
 
           <div className="d-flex justify-content-between">
