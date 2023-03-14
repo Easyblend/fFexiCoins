@@ -51,6 +51,9 @@ const WidthrawPage = () => {
     useContext(CurrencyRatesContext);
 
   const [usdBalance, setUsdBalance] = useState(0);
+  const [gbpBalance, setGbpBalance] = useState(0);
+  const [ethBalance, setEthBalance] = useState(0);
+  const [btcBalance, setBtcBalance] = useState(0);
 
   const [userID, setUserID] = useState();
   const getUser = () => {
@@ -80,12 +83,29 @@ const WidthrawPage = () => {
       console.log(error);
     }
   };
+  const getGBPBalance = async () => {
+    try {
+      if (userID) {
+        let gbpTotal = 0;
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "GBP")
+        );
+        querySnapshot.forEach(
+          (doc) => (gbpTotal += Number(doc.data().Recieved))
+        );
+        setGbpBalance(gbpTotal);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const navigate = useNavigate();
 
   useEffect(getUser, []);
 
   useEffect(() => {
     getUSDBalance();
+    getGBPBalance();
   });
 
   return (
@@ -414,7 +434,7 @@ const UsdwithdrawForm = ({ usdBalance, dollarRate }) => {
 
           <div className="d-flex justify-content-between">
             {" "}
-            <h4 className="text-left">Balance</h4>
+            <h4 className="text-left">Balance Widthdrawable</h4>
             <h4 className="text-danger">
               {" "}
               GH&#8373; {(usdGhcBalance - widthrawAmount).toFixed(2)}
