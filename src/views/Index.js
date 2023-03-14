@@ -101,7 +101,7 @@ const Index = () => {
   const [graphEthDate, setGraphEthDate] = useState([]);
 
   const getUSDData = async () => {
-    console.log(userID);
+
     try {
       if (userID) {
         const usdArray = [];
@@ -332,7 +332,7 @@ const Index = () => {
                     <h6 className="text-uppercase text-light ls-1 mb-1">
                       Overview
                     </h6>
-                    <h2 className="text-white mb-0">Sales value</h2>
+                    <h2 className="text-white mb-0">Purchase Values</h2>
                   </div>
                   <div className="col">
                     <Nav className="justify-content-end w-100 " pills>

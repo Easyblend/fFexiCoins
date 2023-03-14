@@ -101,7 +101,7 @@ function App() {
         <CompatRouter>
           <Switch>
             <CurrencyRatesContext.Provider
-              value={{ dollarRate: dollarRate, gbpRate: gbpRate }}
+              value={{ dollarRate: dollarRate, gbpRate: gbpRate, btcRate:btcRate,ethRate:ethRate }}
             >
               <Route
                 path="/admin"

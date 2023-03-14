@@ -98,7 +98,7 @@ const Admin = (props) => {
       );
       const data = await response.json();
       setDollarRate(data.new_amount);
-      console.log(data.new_amount);
+    
     } catch (error) {
       toast.info(
         "Coundln't get current exchange rate, please check you connection"
