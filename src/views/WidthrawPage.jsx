@@ -99,6 +99,38 @@ const WidthrawPage = () => {
       console.log(error);
     }
   };
+  const getBTCBalance = async () => {
+    try {
+      if (userID) {
+        let btcTotal = 0;
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "BTC")
+        );
+        querySnapshot.forEach(
+          (doc) => (btcTotal += Number(doc.data().Recieved))
+        );
+        setBtcBalance(btcTotal);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getETHBalance = async () => {
+    try {
+      if (userID) {
+        let ethTotal = 0;
+        const querySnapshot = await getDocs(
+          collection(database, "Transactions", userID, "ETH")
+        );
+        querySnapshot.forEach(
+          (doc) => (ethTotal += Number(doc.data().Recieved))
+        );
+        setEthBalance(ethTotal);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const navigate = useNavigate();
 
   useEffect(getUser, []);
@@ -341,6 +373,8 @@ const WidthrawPage = () => {
           </p>
           {usdWithdrawal ? (
             <UsdwithdrawForm usdBalance={usdBalance} dollarRate={dollarRate} />
+          ) : gbpWithdrawal ? (
+            <GbpwithdrawForm gbpBalance={gbpBalance} gbpRate={gbpRate} />
           ) : (
             ""
           )}
@@ -456,7 +490,19 @@ const UsdwithdrawForm = ({ usdBalance, dollarRate }) => {
     </Container>
   );
 };
-const GbpwithdrawForm = () => {
+
+const GbpwithdrawForm = ({ gbpBalance, gbpRate }) => {
+  const [gbpGhcBalance, setGbpGhcBalance] = useState(0);
+
+  const gbp_to_cedis = (
+    (gbpBalance - (20 / 100) * gbpBalance) /
+    gbpRate
+  ).toFixed(2);
+
+  useEffect(() => setGbpGhcBalance(gbp_to_cedis), [gbpBalance]);
+
+  const [widthrawAmount, setWithdrawAmount] = useState(0);
+
   return (
     <Container className="mt-7 flex-wrap-reverse" id="widthdraw">
       <h4 className="text-center">GBP Withdrawal</h4>
@@ -482,17 +528,38 @@ const GbpwithdrawForm = () => {
                     <i class="fa-solid fa-money-check-dollar"></i>
                   </InputGroupText>
                 </InputGroupAddon>
-                <Input placeholder="GHS 0.00" type="number" />
+                <Input
+                  placeholder="GHS 0.00"
+                  type="number"
+                  value={widthrawAmount}
+                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                />
               </InputGroup>
             </FormGroup>
+            <Button className="btn-success mx-auto text-center  justify-content-center d-sm-inline d-flex">
+              Widthdraw
+            </Button>
           </Form>
         </Col>
-        <Col className="text-right my-4 shadow-lg px-3">
-          <h1 className="display-1">$ 12,893.01</h1>
-          <h4 className="text-left">Balance</h4>
+        <Col className=" my-4   shadow-lg px-3">
+          <div className="d-flex justify-content-between">
+            <h1 className="display-1">
+              $ {(gbpBalance.toFixed(2) - widthrawAmount * gbpRate).toFixed(2)}
+            </h1>
+            <h1 className="display-1">GPB</h1>
+          </div>
+
+          <div className="d-flex justify-content-between">
+            {" "}
+            <h4 className="text-left">Balance Widthdrawable</h4>
+            <h4 className="text-danger">
+              {" "}
+              GH&#8373; {(gbpGhcBalance - widthrawAmount).toFixed(2)}
+            </h4>
+          </div>
         </Col>
       </Row>
-      <p className="text-center">
+      <p className="text-center mt-5">
         Please take note of the 3% widthrawal charges with an extra 1.5% e-levy
         tax deductions. <br />
         If you have questions do ask us{" "}
